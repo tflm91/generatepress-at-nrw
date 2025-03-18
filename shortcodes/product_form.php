@@ -74,6 +74,11 @@ function product_form(): bool|string {
             <?php endforeach; ?>
         </fieldset><br>
 
+        <label>
+            <input type="checkbox" name="hidden" id="hidden"
+            <?php checked($is_editing ? $current_product->hidden : false) ?>>
+            Dieses Produkt ausblenden.
+        </label><br><br>
 
         <?php if ($is_editing): ?>
             <input type="hidden" name="product_id" value="<?php echo esc_attr($product_id) ?>">
@@ -109,12 +114,13 @@ function save_product(): void {
         $selected_categories = $_POST['selected_categories'] ?? [];
         $available_general = isset($_POST['available_general']);
         $selected_universities = $_POST['selected_universities'] ?? [];
+        $hidden = isset($_POST['hidden']);
 
         if (!empty($_POST['product_id'])) {
             $product_id = intval($_POST['product_id']);
             $wpdb->update(
                 PRODUCT_TABLE,
-                ['name' => $name, 'description' => $description, 'infoURL' => $info_url, 'infoAlt' => $info_alt, 'availableGeneral' => $available_general],
+                ['name' => $name, 'description' => $description, 'infoURL' => $info_url, 'infoAlt' => $info_alt, 'availableGeneral' => $available_general, 'hidden' => $hidden],
                 ['id' => $product_id]
             );
 
@@ -142,7 +148,8 @@ function save_product(): void {
                 'description' => $description,
                 'infoURL' => $info_url,
                 'infoAlt' => $info_alt,
-                'availableGeneral' => $available_general
+                'availableGeneral' => $available_general,
+                'hidden' => $hidden
             ]);
 
             $product_id = $wpdb->insert_id;
