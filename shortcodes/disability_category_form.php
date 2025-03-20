@@ -7,12 +7,12 @@ require_once get_stylesheet_directory() . '/constants.php';
 function disability_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
-    $links = select_all(ADDITIONAL_LINK_TABLE, false);
+    $links = get_all(ADDITIONAL_LINK_TABLE, false);
     $current_category = null;
 
     if ($is_editing) {
-        $current_category = select_one(DISABILITY_CATEGORY_TABLE, $category_id);
-        $selected_link_ids = select_associated_ids(
+        $current_category = get_by_id(DISABILITY_CATEGORY_TABLE, $category_id);
+        $selected_link_ids = get_connected_ids(
                 LINK_FOR_DISABILITY_TABLE,
             'disabilityId',
             'linkId',

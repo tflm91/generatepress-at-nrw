@@ -13,15 +13,15 @@ function additional_link_form(): bool|string {
     $selected_disability_category_ids = [];
 
     if ($is_editing) {
-        $current_link = select_one(ADDITIONAL_LINK_TABLE, $link_id);
-        $selected_product_category_ids = select_associated_ids(
+        $current_link = get_by_id(ADDITIONAL_LINK_TABLE, $link_id);
+        $selected_product_category_ids = get_connected_ids(
             LINK_FOR_AID_TABLE,
             'linkId',
             'aidId',
             $link_id
         );
 
-        $selected_disability_category_ids = select_associated_ids(
+        $selected_disability_category_ids = get_connected_ids(
             LINK_FOR_DISABILITY_TABLE,
             'linkId',
             'disabilityId',
@@ -29,8 +29,8 @@ function additional_link_form(): bool|string {
         );
     }
 
-    $product_categories = select_all(PRODUCT_CATEGORY_TABLE);
-    $disability_categories = select_all(DISABILITY_CATEGORY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
+    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE);
 
 
     ob_start();

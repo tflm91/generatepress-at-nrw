@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_product_categories', 'list_editable_product_categories');
 
 function list_editable_product_categories(): string {
-    $product_categories = select_all(PRODUCT_CATEGORY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
     $output = '';
 
     if (!empty($product_categories)) {
@@ -76,8 +76,9 @@ function delete_product_category_script(): void {
 add_action('wp_footer', 'delete_product_category_script');
 
 function delete_product_category(): void {
+    global $wpdb;
     $category_id = intval($_POST['category_id']);
-    delete_element(PRODUCT_CATEGORY_TABLE, $category_id);
+    $wpdb->delete(PRODUCT_CATEGORY_TABLE, ["id" => $category_id]);
     wp_send_json(['success' => true]);
 }
 

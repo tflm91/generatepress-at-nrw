@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_links', 'list_editable_links');
 
 function list_editable_links(): string {
-    $links = select_all(ADDITIONAL_LINK_TABLE, false);
+    $links = get_all(ADDITIONAL_LINK_TABLE, false);
     $output = '';
 
     if (!empty($links)) {
@@ -76,8 +76,9 @@ function delete_link_script(): void {
 add_action('wp_footer', 'delete_link_script');
 
 function delete_link(): void {
+    global $wpdb;
     $link_id = intval($_POST['link_id']);
-    delete_element(ADDITIONAL_LINK_TABLE, $link_id);
+    $wpdb->delete(ADDITIONAL_LINK_TABLE, ['id' => $link_id]);
     wp_send_json(['success' => true]);
 }
 

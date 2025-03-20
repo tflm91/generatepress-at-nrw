@@ -18,7 +18,7 @@ function show_aids(): string {
 
 /* show detailed information about a specified product */
 function show_detailed_product_information($product_id): string {
-    $row = select_one(PRODUCT_TABLE, $product_id);
+    $row = get_by_id(PRODUCT_TABLE, $product_id);
 
     $output = "<div>\n";
     if ($row) {
@@ -42,7 +42,7 @@ function show_detailed_product_information($product_id): string {
 
 /* list all categories of assistive technologies delt with in the database */
 function list_categories(): string {
-    $rows = select_all(PRODUCT_CATEGORY_TABLE);
+    $rows = get_all(PRODUCT_CATEGORY_TABLE);
     $output = "<div>\n";
     if ($rows) {
         foreach ($rows as $row) {
@@ -58,10 +58,9 @@ function list_categories(): string {
 
 /* display detailed information about a specific product category */
 function display_product_category_information($row): string {
-    $number_of_products = count_items(CATEGORY_OF_PRODUCT_TABLE, $row->id);
     $output = "";
 
-    if ($number_of_products > 0) {
+    if (has_connected_objects(CATEGORY_OF_PRODUCT_TABLE, 'categoryId', $row->id)) {
         $category = new ProductCategory(
             $row->id ?? 0,
             $row->name ?? 'Unbekannt',
@@ -89,10 +88,5 @@ function list_products_without_category(): string {
 
 /* find products without product category */
 function find_products_without_category() {
-    return select_without_category(
-        CATEGORY_OF_PRODUCT_TABLE,
-        "categoryId",
-        PRODUCT_TABLE,
-        "productId"
-    );
+    return get_unconnected_objects(PRODUCT_TABLE, CATEGORY_OF_PRODUCT_TABLE, 'productId');
 }

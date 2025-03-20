@@ -16,7 +16,7 @@ class Impairment {
     }
 
     function find_suitable_aids() {
-        return select_connected(
+        return get_connected(
             $this->connection_table,
             'impairmentId',
             PRODUCT_CATEGORY_TABLE,

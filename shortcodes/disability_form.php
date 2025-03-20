@@ -12,8 +12,8 @@ function disability_form(): bool|string {
     $selected_product_category_ids = [];
 
     if ($is_editing) {
-        $current_disability = select_one(DISABILITY_TABLE, $disability_id);
-        $selected_product_category_ids = select_associated_ids(
+        $current_disability = get_by_id(DISABILITY_TABLE, $disability_id);
+        $selected_product_category_ids = get_connected_ids(
                 AIDS_WITH_DISABILITY_TABLE,
             'impairmentId',
             'categoryId',
@@ -21,8 +21,8 @@ function disability_form(): bool|string {
         );
     }
 
-    $disability_categories = select_all(DISABILITY_CATEGORY_TABLE);
-    $product_categories = select_all(PRODUCT_CATEGORY_TABLE);
+    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
 
 
     ob_start();

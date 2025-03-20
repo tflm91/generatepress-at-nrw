@@ -22,10 +22,10 @@ class ProductCategory {
         }
         $output .= $this->list_products();
 
-        $additional_links = select_connected_links(
+        $additional_links = get_connected(
             LINK_FOR_AID_TABLE,
-            ADDITIONAL_LINK_TABLE,
             "aidId",
+            ADDITIONAL_LINK_TABLE,
             "linkId",
             $this->id,
         );
@@ -38,7 +38,7 @@ class ProductCategory {
     }
 
     function get_products() {
-        return select_connected(
+        return get_connected(
             CATEGORY_OF_PRODUCT_TABLE,
             'categoryId',
             PRODUCT_TABLE,

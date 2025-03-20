@@ -19,7 +19,7 @@ class University {
     public function __construct(
         $id,
         $name,
-        $divsion,
+        $division,
         $contact_name,
         $phone_number,
         $phone_alt,
@@ -30,7 +30,7 @@ class University {
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->divsion = $divsion;
+        $this->divsion = $division;
         $this->contact_name = $contact_name;
         $this->phone_number = $phone_number;
         $this->phone_alt = $phone_alt;
@@ -41,7 +41,7 @@ class University {
     }
 
     function get_aids() {
-        return select_connected(
+        return get_connected(
             AVAILABILITY_TABLE,
             'universityId',
             PRODUCT_TABLE,
@@ -87,6 +87,5 @@ class University {
         $output .= '<h3>Arbeitsräume</h3>';
         $output .= '<p>' . esc_html($this->workspaces) . '</p>';
         return $output;
-
     }
 }

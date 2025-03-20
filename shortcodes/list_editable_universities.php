@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_universities', 'list_editable_universities');
 
 function list_editable_universities(): string {
-    $universities = select_all(UNIVERSITY_TABLE);
+    $universities = get_all(UNIVERSITY_TABLE);
     $output = '';
 
     if (!empty($universities)) {
@@ -76,8 +76,9 @@ function delete_university_script(): void {
 add_action('wp_footer', 'delete_university_script');
 
 function delete_university(): void {
+    global $wpdb;
     $university_id = intval($_POST['university_id']);
-    delete_element(UNIVERSITY_TABLE, $university_id);
+    $wpdb->delete(UNIVERSITY_TABLE, ['id' => $university_id]);
     wp_send_json(['success' => true]);
 }
 

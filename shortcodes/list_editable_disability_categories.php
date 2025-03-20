@@ -5,7 +5,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_disability_categories', 'list_editable_disability_categories');
 
 function list_editable_disability_categories(): string {
-    $categories = select_all(DISABILITY_CATEGORY_TABLE);
+    $categories = get_all(DISABILITY_CATEGORY_TABLE);
     $output = "";
     if (!empty ($categories)) {
         $output .= "<table>";
@@ -83,7 +83,7 @@ add_action('wp_footer', 'delete_disability_category_script');
 
 function check_disability_category(): void {
     $category_id = intval($_GET['category_id']);
-    $disabilities = select_of_category(DISABILITY_TABLE, $category_id) ?? [];
+    $disabilities = get_by_category(DISABILITY_TABLE, $category_id) ?? [];
 
     wp_send_json([
        'hasEntries' => count($disabilities) > 0,
@@ -95,12 +95,13 @@ add_action('wp_ajax_check_disability_category', 'check_disability_category');
 add_action('wp_ajax_nopriv_check_disability_category', 'check_disability_category');
 
 function delete_disability_category(): void {
+    global $wpdb;
     $category_id = intval($_POST['category_id']);
 
-    $disabilities = select_of_category(DISABILITY_TABLE, $category_id) ?? [];
+    $disabilities = get_by_category(DISABILITY_TABLE, $category_id) ?? [];
 
     if (empty($disabilities)) {
-        delete_element(DISABILITY_CATEGORY_TABLE, $category_id);
+        $wpdb->delete(DISABILITY_CATEGORY_TABLE, ['id' => $category_id]);
         wp_send_json(['success' => true]);
     } else {
         wp_send_json(['success' => false, 'error' => 'Category still contains disabilities. ']);

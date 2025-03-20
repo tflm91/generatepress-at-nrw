@@ -12,8 +12,8 @@ function university_form(): bool|string {
     $selected_product_ids = [];
 
     if ($is_editing) {
-        $current_university = select_one(UNIVERSITY_TABLE, $university_id);
-        $selected_product_ids = select_associated_ids(
+        $current_university = get_by_id(UNIVERSITY_TABLE, $university_id);
+        $selected_product_ids = get_connected_ids(
             AVAILABILITY_TABLE,
             'universityId',
             'productId',
@@ -21,8 +21,8 @@ function university_form(): bool|string {
         );
     }
 
-    $general_products = select_conditional_product(PRODUCT_TABLE, 'availableEverywhere');
-    $non_general_products = select_non_conditional_product(PRODUCT_TABLE, 'availableEverywhere');
+    $general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', true);
+    $non_general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', false);
     ob_start();
     ?>
     <form method="post">

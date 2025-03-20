@@ -22,7 +22,7 @@ class Product {
     }
 
     function get_universities() {
-        return select_connected(
+        return get_connected(
             AVAILABILITY_TABLE,
             'productId',
             UNIVERSITY_TABLE,

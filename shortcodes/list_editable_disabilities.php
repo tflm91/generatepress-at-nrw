@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_disabilities', 'list_editable_disabilities');
 
 function list_editable_disabilities(): string {
-    $disabilities = select_all(DISABILITY_TABLE);
+    $disabilities = get_all(DISABILITY_TABLE);
     $output = '';
 
     if (!empty($disabilities)) {
@@ -76,8 +76,9 @@ function delete_disability_script(): void {
 add_action('wp_footer', 'delete_disability_script');
 
 function delete_disability(): void {
+    global $wpdb;
     $disability_id = intval($_POST['disability_id']);
-    delete_element(DISABILITY_TABLE, $disability_id);
+    $wpdb->delete(DISABILITY_TABLE, ["id" => $disability_id]);
     wp_send_json(['success' => true]);
 }
 

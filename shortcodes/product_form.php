@@ -13,15 +13,15 @@ function product_form(): bool|string {
     $selected_university_ids = [];
 
     if ($is_editing) {
-        $current_product = select_one(PRODUCT_TABLE, $product_id);
-        $selected_product_category_ids = select_associated_ids(
+        $current_product = get_by_id(PRODUCT_TABLE, $product_id);
+        $selected_product_category_ids = get_connected_ids(
             CATEGORY_OF_PRODUCT_TABLE,
             'productId',
             'categoryId',
             $product_id
         );
 
-        $selected_university_ids = select_associated_ids(
+        $selected_university_ids = get_connected_ids(
                 AVAILABILITY_TABLE,
             'productId',
             'universityId',
@@ -29,8 +29,8 @@ function product_form(): bool|string {
         );
     }
 
-    $product_categories = select_all(PRODUCT_CATEGORY_TABLE);
-    $universities = select_all(UNIVERSITY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
+    $universities = get_all(UNIVERSITY_TABLE);
 
     ob_start();
     ?>

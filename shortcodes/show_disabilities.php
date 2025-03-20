@@ -20,7 +20,7 @@ function show_disabilities(): string {
 
 /* show detailed information about a specific disability */
 function show_detailed_disability_information ($disability_id): string {
-    $row = select_one(DISABILITY_TABLE, $disability_id);
+    $row = get_by_id(DISABILITY_TABLE, $disability_id);
     if ($row) {
         $disability = new Disability(
             $row->id ?? 0,
@@ -42,7 +42,7 @@ function show_detailed_disability_information ($disability_id): string {
 
 /* list all disability categories */
 function list_disability_categories(): string {
-    $results = select_all(DISABILITY_CATEGORY_TABLE);
+    $results = get_all(DISABILITY_CATEGORY_TABLE);
     $output = "<div>\n";
     if ($results) {
         foreach ($results as $row) {
@@ -57,9 +57,8 @@ function list_disability_categories(): string {
 
 /* display information about the specified disability_category */
 function display_disability_category_information($row): string {
-    $number_of_disabilities = count_items(DISABILITY_TABLE, $row->id);
     $output = "";
-    if ($number_of_disabilities > 0) {
+    if (category_has_objects(DISABILITY_TABLE, $row->id)) {
         $disability_category = new DisabilityCategory(
             $row->id ?? 0,
                 $row->name ?? 'Unbekannt',

@@ -8,10 +8,10 @@ function product_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
 
-    $disabilities = select_all(DISABILITY_TABLE);
-    $limitations = select_all(FUNCTIONAL_LIMITATION_TABLE);
-    $products = select_all(PRODUCT_TABLE);
-    $links = select_all(ADDITIONAL_LINK_TABLE, false);
+    $disabilities = get_all(DISABILITY_TABLE);
+    $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE);
+    $products = get_all(PRODUCT_TABLE);
+    $links = get_all(ADDITIONAL_LINK_TABLE, false);
 
     $current_category = null;
     $selected_disability_ids = [];
@@ -21,30 +21,30 @@ function product_category_form(): bool|string {
     $unselected_links = [];
 
     if ($is_editing) {
-        $current_category = select_one(PRODUCT_CATEGORY_TABLE, ['id' => $category_id]);
+        $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, ['id' => $category_id]);
 
-        $selected_disability_ids = select_associated_ids(
+        $selected_disability_ids = get_connected_ids(
             AIDS_WITH_DISABILITY_TABLE,
             'categoryId',
             'impairmentId',
             $category_id
         );
 
-        $selected_limitation_ids = select_associated_ids(
+        $selected_limitation_ids = get_connected_ids(
             AIDS_WITH_LIMITATION_TABLE,
             'categoryId',
             'impairmentId',
             $category_id
         );
 
-        $selected_product_ids = select_associated_ids(
+        $selected_product_ids = get_connected_ids(
             CATEGORY_OF_PRODUCT_TABLE,
             'categoryId',
             'productId',
             $category_id
         );
 
-        $selected_link_ids = select_associated_ids(
+        $selected_link_ids = get_connected_ids(
             LINK_FOR_AID_TABLE,
             'aidId',
             'linkId',

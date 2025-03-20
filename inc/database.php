@@ -1,117 +1,77 @@
 <?php
 
-/* select all objects of a specified table */
-function select_all($table_name, $order_by_name = true) {
+/* universal function for database query */
+function query_database($query, $params = [], $single_result = false) {
     global $wpdb;
-    $stmt = "SELECT * FROM $table_name";
-    if ($order_by_name) {
-        $stmt .= " ORDER BY name";
+
+    if (!empty($params)) {
+        $query = $wpdb->prepare($query, $params);
     }
-    return $wpdb->get_results($stmt);
+
+    return $single_result ? $wpdb->get_row($query) : $wpdb->get_results($query);
 }
 
-/* select an object specified by its ID */
-function select_one($table_name, $object_id) {
-    global $wpdb;
-    return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id=%d", $object_id));
+/* retrieve all entries of a table */
+function get_all($table, $order_by = 'name') {
+    $query = "SELECT * FROM $table";
+
+    if ($order_by) {
+        $query .= " ORDER BY $order_by";
+    }
+
+    return query_database($query);
 }
 
-/* select all objects of a specified category */
-function select_of_category($table_name, $category_id) {
-    global $wpdb;
-    return $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM $table_name WHERE categoryId = %d ORDER BY name",
-        $category_id
-    ));
+/* retrieve single entry by ID */
+function get_by_id($table, $id) {
+    $query = "SELECT * FROM $table WHERE id=%d";
+    return query_database($query, [$id], true);
 }
 
-/* select all m:n-connected objects of a specified object */
-function select_connected(
-    $connection_table,
-    $search_column,
-    $target_table,
-    $connection_column,
-    $search_id
-) {
-    global $wpdb;
-    $stmt = "SELECT {$target_table}.id AS id, {$target_table}.name AS name FROM {$connection_table}"
-    . " INNER JOIN {$target_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
-    . " WHERE {$connection_table}.{$search_column} = %d"
-    . " ORDER BY {$target_table}.name";
-
-
-    return $wpdb->get_results($wpdb->prepare($stmt, $search_id));
+/* retrieve all entries of a specified category */
+function get_by_category($table, $category_id) {
+    $query = "SELECT * FROM $table WHERE categoryId = %d ORDER BY name";
+    return query_database($query, [$category_id]);
 }
 
-
-/* select all objects without category */
-function select_without_category(
-    $connection_table,
-    $search_column,
-    $target_table,
-    $connection_column
-) {
-    global $wpdb;
-    $stmt = "SELECT {$target_table}.id AS id, {$target_table}.name AS name FROM {$target_table}"
-        . " LEFT JOIN {$connection_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
-        . " WHERE {$connection_table}.{$search_column} IS NULL";
-    return $wpdb->get_results($stmt);
+/* retrieve all objects of an m:n-connection */
+function get_connected($connection_table, $search_column, $target_table, $connection_column, $search_id) {
+    $query = "SELECT {$target_table}.* FROM {$target_table}"
+              . " JOIN {$connection_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
+              . " WHERE {$connection_table}.{$search_column} = %d";
+    return query_database($query, [$search_id]);
 }
 
-/* count all items of a category specified by its ID */
-function count_items($connection_table, $category_id) {
-    global $wpdb;
-    return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $connection_table WHERE categoryId = %d", $category_id));
+/* retrieve all IDs of an m:n-connection */
+function get_connected_ids($connection_table, $search_column, $connection_column, $search_id) {
+    $query = "SELECT {$connection_column} FROM {$connection_table} WHERE {$search_column} = %d";
+    $results = query_database($query, [$search_id]);
+    return array_map(fn($item) => $item->{$connection_column}, $results);
 }
 
-/* select only products which satisfy a condition */
-function select_conditional_product($table_name, $conditional_column) {
-    global $wpdb;
-    return $wpdb->get_results("SELECT id, name FROM $table_name WHERE $conditional_column = TRUE");
+/* retrieve all entries which satisfy a specified condition*/
+function get_by_condition($table, $column, $value) {
+    $query = "SELECT * FROM $table WHERE $column = %s";
+    return query_database($query, [$value]);
 }
 
-/* select only products which do not satisfy a condition */
-function select_non_conditional_product($table_name, $conditional_column) {
-    global $wpdb;
-    return $wpdb->get_results("SELECT id, name FROM $table_name WHERE $conditional_column = FALSE");
+/* check if a category has objects */
+function category_has_objects($table, $category_id): bool {
+    $query = "SELECT COUNT(*) AS count FROM $table WHERE categoryId = %d";
+    $result = query_database($query, [$category_id], true);
+    return $result->count > 0;
 }
 
-
-/* select only comprehensive links */
-function select_conditional_links($table_name, $conditional_column) {
-    global $wpdb;
-    return $wpdb->get_results("SELECT URL, altText FROM $table_name WHERE $conditional_column = TRUE");
+/* check if an item has connected objects */
+function has_connected_objects($connection_table, $search_column, $search_id): bool {
+    $query = "SELECT COUNT(*) AS count FROM $connection_table WHERE {$search_column} = %d";
+    $result = query_database($query, [$search_id], true);
+    return $result->count > 0;
 }
 
-/* select additional links for disability category or product category */
-function select_connected_links(
-    $connection_table,
-    $linkTable,
-    $itemForeignKey,
-    $linkForeignKey,
-    $itemId
-) {
-    global $wpdb;
-    $stmt = "SELECT $linkTable.URL AS URL, $linkTable.altText AS altText FROM $connection_table"
-        . " INNER JOIN $linkTable ON $linkTable.id = {$connection_table}.{$linkForeignKey}"
-        . " WHERE {$connection_table}.{$itemForeignKey} = %d";
-    return $wpdb->get_results($wpdb->prepare($stmt, $itemId));
-}
-
-/* delete a specified element */
-function delete_element($table_name, $object_id): void {
-    global $wpdb;
-    $wpdb->delete($table_name, ['id' => $object_id]);
-}
-
-/* select all ids associated to a specific object */
-function select_associated_ids(
-    $table_name,
-    $object_id_column,
-    $associated_id_column,
-    $object_id) {
-    global $wpdb;
-    $stmt = "SELECT {$associated_id_column} FROM $table_name"
-        . " WHERE {$object_id_column} = %d";
-    return $wpdb->get_col($wpdb->prepare($stmt, $object_id));
+/* list all objects without m:n-connection */
+function get_unconnected_objects($main_table, $connection_table, $main_id_column) {
+    $query = "SELECT * FROM $main_table WHERE id NOT IN"
+        . " (SELECT DISTINCT {$main_id_column} FROM $connection_table)";
+    return query_database($query);
 }

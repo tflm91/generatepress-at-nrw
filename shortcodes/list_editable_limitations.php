@@ -76,8 +76,9 @@ function delete_limitation_script(): void {
 add_action('wp_footer', 'delete_limitation_script');
 
 function delete_limitation(): void {
+    global $wpdb;
     $limitation_id = intval($_POST['limitation_id']);
-    delete_element(FUNCTIONAL_LIMITATION_TABLE, $limitation_id);
+    $wpdb->delete(FUNCTIONAL_LIMITATION_TABLE, ['id' => $limitation_id]);
     wp_send_json(['success' => true]);
 }
 

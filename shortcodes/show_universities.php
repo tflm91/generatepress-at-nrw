@@ -16,7 +16,7 @@ function show_universities(): string {
 
 /* show details page for a specific university */
 function show_university_details_page($university_id): string {
-    $row = select_one(UNIVERSITY_TABLE, $university_id);
+    $row = get_by_id(UNIVERSITY_TABLE, $university_id);
     $output = "<div>\n";
     if ($row) {
         $university = construct_university_from_row($row);
@@ -48,11 +48,11 @@ function construct_university_from_row($row): University {
     );
 }
 
-/* lists all aids available on each university */
+/* lists all generally available aids*/
 function list_general_aids(): string {
     $before_html =  '<h4>Allgemein verfügbare Produkte</h4>';
     return generate_item_list(
-        select_conditional_product(PRODUCT_TABLE, 'availableGeneral'),
+        get_by_condition(PRODUCT_TABLE, 'availableGeneral', true),
         "assistive-technologien",
         $before_html
     );
@@ -60,7 +60,7 @@ function list_general_aids(): string {
 
 /* list all universities in NRW */
 function list_universities(): string {
-    $rows = select_all(UNIVERSITY_TABLE);
+    $rows = get_all(UNIVERSITY_TABLE);
 
     $output = "<div>\n";
     if ($rows) {

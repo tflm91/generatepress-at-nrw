@@ -33,7 +33,7 @@ function generate_item_link($item, $subpage, $id_prefix = null): string {
 }
 
 /* generate list of additional links */
-function generate_link_list($links) {
+function generate_link_list($links): string {
     $output = "<p>Weiterführende Informationen: </p>";
     $output .= '<ul>';
     foreach($links as $link) {

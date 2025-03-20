@@ -21,11 +21,11 @@ class DisabilityCategory {
             $output .= "<p>" . esc_html($this->description) . "</p>\n";
         }
         $output .= $this->list_disabilities();
-        $additional_links = select_connected_links(
+        $additional_links = get_connected(
             LINK_FOR_DISABILITY_TABLE,
+            'disabilityId',
             ADDITIONAL_LINK_TABLE,
-            "disabilityId",
-            "linkId",
+            'linkId',
             $this->id
         );
 
@@ -37,7 +37,7 @@ class DisabilityCategory {
     }
 
     function list_disabilities(): string {
-        $disabilities = select_of_category(DISABILITY_TABLE, $this->id);
+        $disabilities = get_by_category(DISABILITY_TABLE, $this->id);
         return generate_item_list(
             $disabilities,
             "beeintraechtigungsformen",

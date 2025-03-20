@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_products', 'list_editable_products');
 
 function list_editable_products(): string {
-    $products = select_all(PRODUCT_TABLE);
+    $products = get_all(PRODUCT_TABLE);
     $output = '';
 
     if (!empty($products)) {
@@ -76,8 +76,9 @@ function delete_product_script(): void {
 add_action('wp_footer', 'delete_product_script');
 
 function delete_product(): void {
+    global $wpdb;
     $product_id = intval($_POST['product_id']);
-    delete_element(PRODUCT_TABLE, $product_id);
+    $wpdb->delete(PRODUCT_TABLE, ['id' => $product_id]);
     wp_send_json(['success' => true]);
 }
 
