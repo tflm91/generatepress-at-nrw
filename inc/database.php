@@ -12,7 +12,7 @@ function query_database($query, $params = [], $single_result = false) {
 }
 
 /* retrieve all entries of a table */
-function get_all($table, $order_by = 'name') {
+function get_all($table, $order_by = null) {
     $query = "SELECT * FROM $table";
 
     if ($order_by) {
@@ -29,16 +29,24 @@ function get_by_id($table, $id) {
 }
 
 /* retrieve all entries of a specified category */
-function get_by_category($table, $category_id) {
-    $query = "SELECT * FROM $table WHERE categoryId = %d ORDER BY name";
+function get_by_category($table, $category_id, $order_by = null) {
+    $query = "SELECT * FROM $table WHERE categoryId = %d";
+    if ($order_by) {
+        $query .= " ORDER BY $order_by";
+    }
     return query_database($query, [$category_id]);
 }
 
 /* retrieve all objects of an m:n-connection */
-function get_connected($connection_table, $search_column, $target_table, $connection_column, $search_id) {
+function get_connected($connection_table, $search_column, $target_table, $connection_column, $search_id, $order_by = null) {
     $query = "SELECT {$target_table}.* FROM {$target_table}"
               . " JOIN {$connection_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
               . " WHERE {$connection_table}.{$search_column} = %d";
+
+    if ($order_by) {
+        $query .= " ORDER BY {$order_by}";
+    }
+
     return query_database($query, [$search_id]);
 }
 
@@ -50,8 +58,11 @@ function get_connected_ids($connection_table, $search_column, $connection_column
 }
 
 /* retrieve all entries which satisfy a specified condition*/
-function get_by_condition($table, $column, $value) {
+function get_by_condition($table, $column, $value, $order_by = null) {
     $query = "SELECT * FROM $table WHERE $column = %s";
+    if ($order_by) {
+        $query .= " ORDER BY $order_by";
+    }
     return query_database($query, [$value]);
 }
 
@@ -70,16 +81,26 @@ function has_connected_objects($connection_table, $search_column, $search_id): b
 }
 
 /* list all objects without m:n-connection */
-function get_unconnected_objects($main_table, $connection_table, $main_id_column) {
+function get_unconnected_objects($main_table, $connection_table, $main_id_column, $order_by = null) {
     $query = "SELECT * FROM $main_table WHERE id NOT IN"
         . " (SELECT DISTINCT {$main_id_column} FROM $connection_table)";
+
+    if ($order_by) {
+        $query .= " ORDER BY {$order_by}";
+    }
+
     return query_database($query);
 }
 
 /* list all objects which are not m:n-connected to a specified object */
-function get_unconnected_to_object($connection_table, $search_column, $target_table, $connection_column, $search_id) {
+function get_unconnected_to_object($connection_table, $search_column, $target_table, $connection_column, $search_id, $order_by = null) {
     $query = "SELECT * FROM $target_table WHERE id NOT IN (
     SELECT {$connection_column} FROM {$connection_table} WHERE {$search_column} = %d
     )";
+
+    if ($order_by) {
+        $query .= " ORDER BY {$order_by}";
+    }
+
     return query_database($query, [$search_id]);
 }

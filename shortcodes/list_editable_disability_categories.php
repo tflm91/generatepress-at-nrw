@@ -5,7 +5,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_disability_categories', 'list_editable_disability_categories');
 
 function list_editable_disability_categories(): string {
-    $categories = get_all(DISABILITY_CATEGORY_TABLE);
+    $categories = get_all(DISABILITY_CATEGORY_TABLE, 'name');
     $output = "";
     if (!empty ($categories)) {
         $output .= "<table>";
@@ -98,7 +98,7 @@ function delete_disability_category(): void {
     global $wpdb;
     $category_id = intval($_POST['category_id']);
 
-    $disabilities = get_by_category(DISABILITY_TABLE, $category_id) ?? [];
+    $disabilities = get_by_category(DISABILITY_TABLE, $category_id, 'name') ?? [];
 
     if (empty($disabilities)) {
         $wpdb->delete(DISABILITY_CATEGORY_TABLE, ['id' => $category_id]);

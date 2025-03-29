@@ -21,7 +21,8 @@ class Impairment {
             'impairmentId',
             PRODUCT_CATEGORY_TABLE,
             'categoryId',
-            $this->id
+            $this->id,
+            'name'
         );
     }
 

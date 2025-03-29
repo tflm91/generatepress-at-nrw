@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_links', 'list_editable_links');
 
 function list_editable_links(): string {
-    $links = get_all(ADDITIONAL_LINK_TABLE, false);
+    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
     $output = '';
 
     if (!empty($links)) {

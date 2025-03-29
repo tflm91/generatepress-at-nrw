@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_product_categories', 'list_editable_product_categories');
 
 function list_editable_product_categories(): string {
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
     $output = '';
 
     if (!empty($product_categories)) {

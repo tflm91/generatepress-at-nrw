@@ -28,6 +28,7 @@ class ProductCategory {
             ADDITIONAL_LINK_TABLE,
             "linkId",
             $this->id,
+            'altText'
         );
 
         if (!empty($additional_links)) {
@@ -43,7 +44,8 @@ class ProductCategory {
             'categoryId',
             PRODUCT_TABLE,
             'productId',
-            $this->id
+            $this->id,
+            'name'
         );
     }
 

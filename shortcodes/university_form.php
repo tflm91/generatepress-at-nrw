@@ -21,8 +21,8 @@ function university_form(): bool|string {
         );
     }
 
-    $general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', true);
-    $non_general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', false);
+    $general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', true, 'name');
+    $non_general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', false, 'name');
     ob_start();
     ?>
     <form method="post">

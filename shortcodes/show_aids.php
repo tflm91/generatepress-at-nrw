@@ -42,7 +42,7 @@ function show_detailed_product_information($product_id): string {
 
 /* list all categories of assistive technologies delt with in the database */
 function list_categories(): string {
-    $rows = get_all(PRODUCT_CATEGORY_TABLE);
+    $rows = get_all(PRODUCT_CATEGORY_TABLE, 'name');
     $output = "<div>\n";
     if ($rows) {
         foreach ($rows as $row) {
@@ -88,5 +88,5 @@ function list_products_without_category(): string {
 
 /* find products without product category */
 function find_products_without_category() {
-    return get_unconnected_objects(PRODUCT_TABLE, CATEGORY_OF_PRODUCT_TABLE, 'productId');
+    return get_unconnected_objects(PRODUCT_TABLE, CATEGORY_OF_PRODUCT_TABLE, 'productId', 'name');
 }

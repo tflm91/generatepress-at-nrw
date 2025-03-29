@@ -46,7 +46,8 @@ class University {
             'universityId',
             PRODUCT_TABLE,
             'productId',
-            $this->id
+            $this->id,
+            'name'
         );
     }
 

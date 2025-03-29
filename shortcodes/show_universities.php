@@ -52,7 +52,7 @@ function construct_university_from_row($row): University {
 function list_general_aids(): string {
     $before_html =  '<h4>Allgemein verfügbare Produkte</h4>';
     return generate_item_list(
-        get_by_condition(PRODUCT_TABLE, 'availableGeneral', true),
+        get_by_condition(PRODUCT_TABLE, 'availableGeneral', true, 'name'),
         "assistive-technologien",
         $before_html
     );
@@ -60,7 +60,7 @@ function list_general_aids(): string {
 
 /* list all universities in NRW */
 function list_universities(): string {
-    $rows = get_all(UNIVERSITY_TABLE);
+    $rows = get_all(UNIVERSITY_TABLE, 'name');
 
     $output = "<div>\n";
     if ($rows) {

@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_limitations', 'list_editable_limitations');
 
 function list_editable_limitations(): string {
-    $limitations = select_all(FUNCTIONAL_LIMITATION_TABLE);
+    $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
     $output = '';
 
     if (!empty($limitations)) {

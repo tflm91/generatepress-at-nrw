@@ -7,7 +7,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 function disability_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
-    $links = get_all(ADDITIONAL_LINK_TABLE, false);
+    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
     $current_category = null;
 
     if ($is_editing) {
@@ -18,7 +18,8 @@ function disability_category_form(): bool|string {
             'disabilityId',
             ADDITIONAL_LINK_TABLE,
             'linkId',
-            $category_id
+            $category_id,
+            'altText'
         );
 
         $unselected_links = get_unconnected_to_object(

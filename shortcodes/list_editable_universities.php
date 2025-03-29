@@ -6,7 +6,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 add_shortcode('list_editable_universities', 'list_editable_universities');
 
 function list_editable_universities(): string {
-    $universities = get_all(UNIVERSITY_TABLE);
+    $universities = get_all(UNIVERSITY_TABLE, 'name');
     $output = '';
 
     if (!empty($universities)) {

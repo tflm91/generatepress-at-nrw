@@ -12,7 +12,7 @@ function limitation_form(): bool|string {
     $selected_product_category_ids = [];
 
     if ($is_editing) {
-        $current_limitation = get_by_id(FUNCTIONAL_LIMITATION_TABLE, $limitation_id);
+        $current_limitation = get_by_id(FUNCTIONAL_LIMITATION_TABLE, $limitation_id, 'name');
         $selected_product_category_ids = get_connected_ids(
             AIDS_WITH_LIMITATION_TABLE,
             'impairmentId',
@@ -21,7 +21,7 @@ function limitation_form(): bool|string {
         );
     }
 
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE);
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
 
     ob_start();
     ?>

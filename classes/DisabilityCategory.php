@@ -26,7 +26,8 @@ class DisabilityCategory {
             'disabilityId',
             ADDITIONAL_LINK_TABLE,
             'linkId',
-            $this->id
+            $this->id,
+            'altText'
         );
 
         if (!empty($additional_links)) {
@@ -37,7 +38,7 @@ class DisabilityCategory {
     }
 
     function list_disabilities(): string {
-        $disabilities = get_by_category(DISABILITY_TABLE, $this->id);
+        $disabilities = get_by_category(DISABILITY_TABLE, $this->id, 'name');
         return generate_item_list(
             $disabilities,
             "beeintraechtigungsformen",

@@ -42,7 +42,7 @@ function show_detailed_disability_information ($disability_id): string {
 
 /* list all disability categories */
 function list_disability_categories(): string {
-    $results = get_all(DISABILITY_CATEGORY_TABLE);
+    $results = get_all(DISABILITY_CATEGORY_TABLE, 'name');
     $output = "<div>\n";
     if ($results) {
         foreach ($results as $row) {
