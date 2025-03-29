@@ -75,3 +75,11 @@ function get_unconnected_objects($main_table, $connection_table, $main_id_column
         . " (SELECT DISTINCT {$main_id_column} FROM $connection_table)";
     return query_database($query);
 }
+
+/* list all objects which are not m:n-connected to a specified object */
+function get_unconnected_to_object($connection_table, $search_column, $target_table, $connection_column, $search_id) {
+    $query = "SELECT * FROM $target_table WHERE id NOT IN (
+    SELECT {$connection_column} FROM {$connection_table} WHERE {$search_column} = %d
+    )";
+    return query_database($query, [$search_id]);
+}

@@ -44,20 +44,21 @@ function product_category_form(): bool|string {
             $category_id
         );
 
-        $selected_link_ids = get_connected_ids(
-            LINK_FOR_AID_TABLE,
+        $selected_links = get_connected(
+                LINK_FOR_AID_TABLE,
             'aidId',
+            ADDITIONAL_LINK_TABLE,
             'linkId',
             $category_id
         );
 
-        $selected_links = array_filter($links, function ($link) use ($selected_link_ids): bool {
-            return in_array($link->id, $selected_link_ids);
-        });
-
-        $unselected_links =  array_filter($links, function ($link) use ($selected_link_ids): bool {
-           return !in_array($link->id, $selected_link_ids);
-        });
+        $unselected_links =  get_unconnected_to_object(
+                LINK_FOR_AID_TABLE,
+            'aidId',
+            ADDITIONAL_LINK_TABLE,
+            'linkId',
+            $category_id
+        );
     }
 
     ob_start();
