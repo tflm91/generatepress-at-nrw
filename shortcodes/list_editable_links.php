@@ -2,82 +2,50 @@
 
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
+require_once get_stylesheet_directory() . '/shortcodes/list_editable_items.php';
 
 add_shortcode('list_editable_links', 'list_editable_links');
 
+
+function display_by_alttext($item) {
+    return $item->altText;
+}
+
 function list_editable_links(): string {
-    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
-    $output = '';
-
-    if (!empty($links)) {
-        $output .= '<table>';
-        $output .= '<tr><th>Link</th><th>Aktionen</th></tr>';
-
-        foreach ($links as $link) {
-            $output .= '<tr>';
-            $output .= '<td>' . $link->altText . '<br> ('. $link->URL . ')</td>';
-            $output .= '<td>';
-            $output .= '<a href="' . esc_url(site_url('/weiterfuehrenden-link-bearbeiten?id=' . $link->id)) . '">';
-            $output .= '<button>Bearbeiten</button>';
-            $output .= '</a>';
-            $output .= '<button class="delete-link" data-id="' . esc_attr($link->id) . '">Löschen</button>';
-            $output .= '</td>';
-            $output .= '</tr>';
-        }
-
-        $output .= '</table>';
-
-        $output .= '<div id="delete-dialogue" style="display: none">' .
-            '<div class="modal-content" id="modal-content"></div>' .
-            '</div>';
-
-    } else {
-        $output .= '<p>Keine weiterführenden Links gefunden.</p>';
-    }
-
-    return $output;
+    return list_editable_items(
+            ADDITIONAL_LINK_TABLE,
+        'altText',
+        'Link',
+        'display_by_alttext',
+        'weiterfuehrenden-link-bearbeiten',
+        'delete-link',
+        'Links'
+    );
 }
 
 function delete_link_script(): void {
-    ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".delete-link").forEach(button => {
-                button.addEventListener("click" , function (event) {
-                    event.preventDefault();
-                    let linkId = this.getAttribute("data-id");
-                    let dialogue = document.getElementById('delete-dialogue');
-                    let modalContent = document.getElementById('modal-content');
+    generate_delete_function(
+            'deleteLink',
+        'delete_link'
+    );
 
-                    modalContent.innerHTML = "<span class='close' onclick='closeDialogue()'>&times;</span>" +
-                        "<p>Bist du sicher, dass du diesen Link löschen möchtest?</p>" +
-                        "<button onclick='deleteLink(" + linkId + ")'>Ja</button> " +
-                        "<button onclick='closeDialogue()'>Abbrechen</button>";
+    generate_modal_content_script(
+            'generateLinkModal',
+        'Link',
+        'deleteLink'
+    );
 
-                    dialogue.style.display = "block";
-                });
-            });
-        });
-
-        function deleteLink(linkId) {
-            fetch('<?php echo admin_url("admin-ajax.php")?>', {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "action=delete_link&link_id=" + linkId
-            })
-                .then(() => {
-                    this.location.reload();
-                })
-        }
-    </script>
-    <?php
+    delete_empty_item_script(
+            'delete-link',
+        'generateLinkModal'
+    );
 }
 
 add_action('wp_footer', 'delete_link_script');
 
 function delete_link(): void {
     global $wpdb;
-    $link_id = intval($_POST['link_id']);
+    $link_id = intval($_POST['item_id']);
     $wpdb->delete(ADDITIONAL_LINK_TABLE, ['id' => $link_id]);
     wp_send_json(['success' => true]);
 }
