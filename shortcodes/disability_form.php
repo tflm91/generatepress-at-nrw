@@ -90,12 +90,6 @@ function save_disability(): void {
             );
 
             $wpdb->delete(AIDS_WITH_DISABILITY_TABLE, ['impairmentId' => $disability_id]);
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
-                    'impairmentId' => $disability_id,
-                    'categoryId' => $product_category_id
-                ]);
-            }
         } else {
             $wpdb->insert(DISABILITY_TABLE, [
                 'name'=> $name,
@@ -104,13 +98,13 @@ function save_disability(): void {
             ]);
 
             $disability_id = $wpdb->insert_id;
+        }
 
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
-                    'impairmentId' => $disability_id,
-                    'categoryId' => intval($product_category_id)
-                ]);
-            }
+        foreach ($selected_categories as $product_category_id) {
+            $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
+                'impairmentId' => $disability_id,
+                'categoryId' => $product_category_id
+            ]);
         }
 
         wp_redirect(site_url('/beeintraechtigungsformen-editieren'));

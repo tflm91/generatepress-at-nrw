@@ -125,12 +125,6 @@ function save_product(): void {
             );
 
             $wpdb->delete(CATEGORY_OF_PRODUCT_TABLE, ['productId' => $product_id]);
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
-                    'productId' => $product_id,
-                    'categoryId' => $product_category_id
-                ]);
-            }
 
             if (!$available_general) {
                 $wpdb->delete(AVAILABILITY_TABLE, ['productId' => $product_id]);
@@ -154,13 +148,6 @@ function save_product(): void {
 
             $product_id = $wpdb->insert_id;
 
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
-                    'productId' => $product_id,
-                    'categoryId' => intval($product_category_id)
-                ]);
-            }
-
             if (!$available_general) {
                 foreach ($selected_universities as $university_id) {
                     $wpdb->insert(AVAILABILITY_TABLE, [
@@ -169,6 +156,13 @@ function save_product(): void {
                     ]);
                 }
             }
+        }
+
+        foreach ($selected_categories as $product_category_id) {
+            $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
+                'productId' => $product_id,
+                'categoryId' => $product_category_id
+            ]);
         }
 
         wp_redirect(site_url('/produkte-editieren'));

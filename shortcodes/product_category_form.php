@@ -178,36 +178,9 @@ function save_product_category(): void {
             );
 
             $wpdb->delete(AIDS_WITH_DISABILITY_TABLE, ['categoryId' => $category_id]);
-            foreach ($selected_disabilities as $disability) {
-                $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
-                    'categoryId' => $category_id,
-                    'impairmentId' => $disability
-                ]);
-            }
-
             $wpdb->delete(AIDS_WITH_LIMITATION_TABLE, ['categoryId' => $category_id]);
-            foreach ($selected_limitations as $limitation) {
-                $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
-                   'categoryId' => $category_id,
-                   'impairmentId' => $limitation
-                ]);
-            }
-
             $wpdb->delete(CATEGORY_OF_PRODUCT_TABLE, ['categoryId' => $category_id]);
-            foreach ($selected_products as $product) {
-                $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
-                   'categoryId' => $category_id,
-                   'productId' => $product
-                ]);
-            }
-
             $wpdb->delete(LINK_FOR_AID_TABLE, ['aidId' => $category_id]);
-            foreach ($selected_links as $link) {
-                $wpdb->insert(LINK_FOR_AID_TABLE, [
-                    'aidId' => $category_id,
-                    'linkId' => $link
-                ]);
-            }
         } else {
             $wpdb->insert(PRODUCT_CATEGORY_TABLE, [
                 'name' => $name,
@@ -215,34 +188,34 @@ function save_product_category(): void {
                 ]);
 
             $category_id = $wpdb->insert_id;
+        }
 
-            foreach ($selected_disabilities as $disability) {
-                $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
-                    'categoryId' => $category_id,
-                    'impairmentId' => $disability
-                ]);
-            }
+        foreach ($selected_disabilities as $disability) {
+            $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
+                'categoryId' => $category_id,
+                'impairmentId' => $disability
+            ]);
+        }
 
-            foreach ($selected_limitations as $limitation) {
-                $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
-                    'categoryId' => $category_id,
-                    'impairmentId' => $limitation
-                ]);
-            }
+        foreach ($selected_limitations as $limitation) {
+            $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
+                'categoryId' => $category_id,
+                'impairmentId' => $limitation
+            ]);
+        }
 
-            foreach ($selected_products as $product) {
-                $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
-                    'categoryId' => $category_id,
-                    'productId' => $product
-                ]);
-            }
+        foreach ($selected_products as $product) {
+            $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
+                'categoryId' => $category_id,
+                'productId' => $product
+            ]);
+        }
 
-            foreach ($selected_links as $link) {
-                $wpdb->insert(LINK_FOR_AID_TABLE, [
-                    'aidId' => $category_id,
-                    'linkId' => $link
-                ]);
-            }
+        foreach ($selected_links as $link) {
+            $wpdb->insert(LINK_FOR_AID_TABLE, [
+                'aidId' => $category_id,
+                'linkId' => $link
+            ]);
         }
 
         wp_redirect(site_url('/assistive-technologien-editieren'));

@@ -72,23 +72,17 @@ function save_limitation(): void {
             );
 
             $wpdb->delete(AIDS_WITH_LIMITATION_TABLE, ['impairmentId' => $limitation_id]);
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
-                    'impairmentId' => $limitation_id,
-                    'categoryId' => $product_category_id
-                ]);
-            }
         } else {
             $wpdb->insert(FUNCTIONAL_LIMITATION_TABLE, ['name'=> $name]);
 
             $limitation_id = $wpdb->insert_id;
+        }
 
-            foreach ($selected_categories as $product_category_id) {
-                $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
-                    'impairmentId' => $limitation_id,
-                    'categoryId' => intval($product_category_id)
-                ]);
-            }
+        foreach ($selected_categories as $product_category_id) {
+            $wpdb->insert(AIDS_WITH_LIMITATION_TABLE, [
+                'impairmentId' => $limitation_id,
+                'categoryId' => $product_category_id
+            ]);
         }
 
         wp_redirect(site_url('/funktionseinschraenkungen-editieren'));

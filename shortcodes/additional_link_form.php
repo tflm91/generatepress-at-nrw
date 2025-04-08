@@ -109,12 +109,6 @@ function save_link(): void {
             }
 
             $wpdb->delete(LINK_FOR_AID_TABLE, ['linkId' => $link_id]);
-            foreach ($selected_product_categories as $product_category_id) {
-                $wpdb->insert(LINK_FOR_AID_TABLE, [
-                    'linkId' => $link_id,
-                    'aidId' => $product_category_id
-                ]);
-            }
         } else {
             $wpdb->insert(ADDITIONAL_LINK_TABLE, [
                 'URL' => $link_url,
@@ -130,13 +124,13 @@ function save_link(): void {
                     'disabilityId' => $disability_category_id
                 ]);
             }
+        }
 
-            foreach ($selected_product_categories as $product_category_id) {
-                $wpdb->insert(LINK_FOR_AID_TABLE, [
-                    'linkId' => $link_id,
-                    'aidId' => $product_category_id
-                ]);
-            }
+        foreach ($selected_product_categories as $product_category_id) {
+            $wpdb->insert(LINK_FOR_AID_TABLE, [
+                'linkId' => $link_id,
+                'aidId' => $product_category_id
+            ]);
         }
 
         wp_redirect(site_url('/weiterfuehrende-links-editieren'));

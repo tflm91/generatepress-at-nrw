@@ -163,13 +163,13 @@ function save_university(): void {
             ]);
 
             $university_id = $wpdb->insert_id;
+        }
 
-            foreach ($selected_products as $product_id) {
-                $wpdb->insert(AVAILABILITY_TABLE, [
-                    'universityId' => $university_id,
-                    'productId' => intval($product_id)
-                ]);
-            }
+        foreach ($selected_products as $product_id) {
+            $wpdb->insert(AVAILABILITY_TABLE, [
+                'universityId' => $university_id,
+                'productId' => $product_id
+            ]);
         }
 
         wp_redirect(site_url('/hochschulen-editieren'));
