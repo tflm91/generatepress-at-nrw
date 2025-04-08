@@ -11,7 +11,7 @@ function product_category_form(): bool|string {
     $disabilities = get_all(DISABILITY_TABLE, 'name');
     $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
     $products = get_all(PRODUCT_TABLE, 'name');
-    $links = get_all(ADDITIONAL_LINK_TABLE, 'name');
+    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
 
     $current_category = null;
     $selected_disability_ids = [];
@@ -20,8 +20,9 @@ function product_category_form(): bool|string {
     $selected_links = [];
     $unselected_links = [];
 
+
     if ($is_editing) {
-        $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, ['id' => $category_id]);
+        $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, $category_id);
 
         $selected_disability_ids = get_connected_ids(
             AIDS_WITH_DISABILITY_TABLE,

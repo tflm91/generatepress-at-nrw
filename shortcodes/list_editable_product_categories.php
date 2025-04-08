@@ -2,82 +2,45 @@
 
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
+require_once get_stylesheet_directory() . '/shortcodes/list_editable_items.php';
 
 add_shortcode('list_editable_product_categories', 'list_editable_product_categories');
 
 function list_editable_product_categories(): string {
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
-    $output = '';
-
-    if (!empty($product_categories)) {
-        $output .= '<table>';
-        $output .= '<tr><th>Assistive Technologie</th><th>Aktionen</th></tr>';
-
-        foreach ($product_categories as $product_category) {
-            $output .= '<tr>';
-            $output .= '<td>' . $product_category->name . '</td>';
-            $output .= '<td>';
-            $output .= '<a href="' . esc_url(site_url('/assistive-technologie-bearbeiten?id=' . $product_category->id)) . '">';
-            $output .= '<button>Bearbeiten</button>';
-            $output .= '</a>';
-            $output .= '<button class="delete-product-category" data-id="' . esc_attr($product_category->id) . '">Löschen</button>';
-            $output .= '</td>';
-            $output .= '</tr>';
-        }
-
-        $output .= '</table>';
-
-        $output .= '<div id="delete-dialogue" style="display: none">' .
-            '<div class="modal-content" id="modal-content"></div>' .
-            '</div>';
-
-    } else {
-        $output .= '<p>Keine assistiven Technologien gefunden.</p>';
-    }
-
-    return $output;
+    return list_editable_items(
+            PRODUCT_CATEGORY_TABLE,
+        'name',
+        'Assistive Technologie',
+        'display_by_name',
+        'assistive-technologie-bearbeiten',
+        'delete-product-category',
+        'Assistive Technologien'
+    );
 }
 
 function delete_product_category_script(): void {
-    ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".delete-product-category").forEach(button => {
-                button.addEventListener("click" , function (event) {
-                    event.preventDefault();
-                    let categoryId = this.getAttribute("data-id");
-                    let dialogue = document.getElementById('delete-dialogue');
-                    let modalContent = document.getElementById('modal-content');
+    generate_delete_function(
+            'deleteProductCategory',
+            'delete_product_category'
+    );
 
-                    modalContent.innerHTML = "<span class='close' onclick='closeDialogue()'>&times;</span>" +
-                        "<p>Bist du sicher, dass du diese assistive Technologie löschen möchtest?</p>" +
-                        "<button onclick='deleteProductCategory(" + categoryId + ")'>Ja</button> " +
-                        "<button onclick='closeDialogue()'>Abbrechen</button>";
+    generate_modal_content_script(
+            'generateProductCategoryModal',
+        'Assistive Technologie',
+        'deleteProductCategory',
+    );
 
-                    dialogue.style.display = "block";
-                });
-            });
-        });
-
-        function deleteProductCategory(categoryId) {
-            fetch('<?php echo admin_url("admin-ajax.php")?>', {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "action=delete_product_category&category_id=" + categoryId
-            })
-                .then(() => {
-                    this.location.reload();
-                })
-        }
-    </script>
-    <?php
+    delete_empty_item_script(
+            'delete-product-category',
+        'generateProductCategoryModal'
+    );
 }
 
 add_action('wp_footer', 'delete_product_category_script');
 
 function delete_product_category(): void {
     global $wpdb;
-    $category_id = intval($_POST['category_id']);
+    $category_id = intval($_POST['item_id']);
     $wpdb->delete(PRODUCT_CATEGORY_TABLE, ["id" => $category_id]);
     wp_send_json(['success' => true]);
 }

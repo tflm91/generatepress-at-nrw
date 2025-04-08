@@ -8,6 +8,7 @@ function query_database($query, $params = [], $single_result = false) {
         $query = $wpdb->prepare($query, $params);
     }
 
+
     return $single_result ? $wpdb->get_row($query) : $wpdb->get_results($query);
 }
 
