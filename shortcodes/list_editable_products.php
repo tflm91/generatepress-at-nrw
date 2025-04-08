@@ -2,82 +2,45 @@
 
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
+require_once get_stylesheet_directory() . '/shortcodes/list_editable_items.php';
 
 add_shortcode('list_editable_products', 'list_editable_products');
 
 function list_editable_products(): string {
-    $products = get_all(PRODUCT_TABLE, 'name');
-    $output = '';
-
-    if (!empty($products)) {
-        $output .= '<table>';
-        $output .= '<tr><th>Produkt</th><th>Aktionen</th></tr>';
-
-        foreach ($products as $product) {
-            $output .= '<tr>';
-            $output .= '<td>' . $product->name . '</td>';
-            $output .= '<td>';
-            $output .= '<a href="' . esc_url(site_url('/produkt-bearbeiten?id=' . $product->id)) . '">';
-            $output .= '<button>Bearbeiten</button>';
-            $output .= '</a>';
-            $output .= '<button class="delete-product" data-id="' . esc_attr($product->id) . '">Löschen</button>';
-            $output .= '</td>';
-            $output .= '</tr>';
-        }
-
-        $output .= '</table>';
-
-        $output .= '<div id="delete-dialogue" style="display: none">' .
-            '<div class="modal-content" id="modal-content"></div>' .
-            '</div>';
-
-    } else {
-        $output .= '<p>Keine Produkte gefunden.</p>';
-    }
-
-    return $output;
+    return list_editable_items(
+            PRODUCT_TABLE,
+        'name',
+        'Produkt',
+        'display_by_name',
+        'produkt-bearbeiten',
+        'delete-product',
+        'Produkte'
+    );
 }
 
 function delete_product_script(): void {
-    ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".delete-product").forEach(button => {
-                button.addEventListener("click" , function (event) {
-                    event.preventDefault();
-                    let productId = this.getAttribute("data-id");
-                    let dialogue = document.getElementById('delete-dialogue');
-                    let modalContent = document.getElementById('modal-content');
+    generate_delete_function(
+            'deleteProduct',
+        'delete_product'
+    );
 
-                    modalContent.innerHTML = "<span class='close' onclick='closeDialogue()'>&times;</span>" +
-                        "<p>Bist du sicher, dass du dieses Produkt löschen möchtest?</p>" +
-                        "<button onclick='deleteProduct(" + productId + ")'>Ja</button> " +
-                        "<button onclick='closeDialogue()'>Abbrechen</button>";
+    generate_modal_content_script(
+            'generateProductModal',
+        'Produkt',
+        'deleteProduct'
+    );
 
-                    dialogue.style.display = "block";
-                });
-            });
-        });
-
-        function deleteProduct(productId) {
-            fetch('<?php echo admin_url("admin-ajax.php")?>', {
-                method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "action=delete_product&product_id=" + productId
-            })
-                .then(() => {
-                    this.location.reload();
-                })
-        }
-    </script>
-    <?php
+    delete_empty_item_script(
+            'delete-product',
+        'generateProductModal',
+    );
 }
 
 add_action('wp_footer', 'delete_product_script');
 
 function delete_product(): void {
     global $wpdb;
-    $product_id = intval($_POST['product_id']);
+    $product_id = intval($_POST['item_id']);
     $wpdb->delete(PRODUCT_TABLE, ['id' => $product_id]);
     wp_send_json(['success' => true]);
 }
