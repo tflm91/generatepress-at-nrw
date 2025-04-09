@@ -21,7 +21,7 @@ function list_editable_items(
 
     if (!empty($items)) {
         $output .= '<table>';
-        $output .= '<tr><th>' . $item_singular .'</th><td>Aktionen</td></tr>';
+        $output .= '<tr><th>' . $item_singular .'</th><th>Aktionen</th></tr>';
 
         foreach ($items as $item) {
             $output .= '<tr>';
