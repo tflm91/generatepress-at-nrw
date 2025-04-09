@@ -1,6 +1,6 @@
 <?php
 
-require_once get_stylesheet_directory() . '/inc/helpers.php';
+require_once get_stylesheet_directory() . '/inc/display_helpers.php';
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
 
