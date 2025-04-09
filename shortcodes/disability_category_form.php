@@ -7,8 +7,7 @@ require_once get_stylesheet_directory() . '/constants.php';
 function disability_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
-    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
-    $current_category = null;
+    $selected_links = [];
 
     if ($is_editing) {
         $current_category = get_by_id(DISABILITY_CATEGORY_TABLE, $category_id);
@@ -29,59 +28,45 @@ function disability_category_form(): bool|string {
             'linkId',
             $category_id
         );
+    } else {
+        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
     }
 
 ob_start();
 ?>
 <form method="post">
-    <label for="category_name">Name der Behinderungskategorie (max. 50 Zeichen)</label>
-    <input type="text" id="category_name" name="category_name" maxlength="50" required
-    value="<?php echo $is_editing ? esc_attr($current_category->name) : ''; ?>"><br><br>
+    <?php text_input(
+            'category_name',
+            'Name der Behinderungskategorie',
+        50,
+        true,
+        $is_editing ? esc_attr($current_category->name) : ''
+    ); ?>
 
-    <label for="category_description">Beschreibung (max. 1000 Zeichen) :</label>
-    <textarea id="category_description" name="category_description" maxlength="1000" rows="<?php echo esc_attr(TEXTAREA_ROW_COUNT)?>" required><?php echo $is_editing ? esc_attr($current_category->description) : ''; ?></textarea><br><br>
+    <?php textarea_input(
+            'category_description',
+        'Beschreibung',
+        1000,
+        TEXTAREA_ROW_COUNT,
+        true,
+        $is_editing ? esc_attr($current_category->description) : ''
+    ); ?>
 
     <fieldset>
         <legend>Weiterführende Links auswählen:</legend>
-        <?php if ($is_editing && !empty($selected_links)): ?>
-            <p>Bislang verknüpfte Links: </p>
-            <?php foreach ($selected_links as $link): ?>
-                <label>
-                    <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>"
-                           checked >
-                    <?php echo esc_html($link->altText) ?>
-                </label><br>
-            <?php endforeach; ?>
-            <br>
-            <p>Weitere Links: </p>
-            <?php if(!empty($unselected_links)): ?>
-                <?php foreach ($unselected_links as $link): ?>
-                    <label>
-                        <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>">
-                        <?php echo esc_html($link->altText) ?>
-                    </label><br>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Alle verfügbaren Links waren bereits ausgewählt: </p>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php foreach ($links as $link): ?>
-                <label>
-                    <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>">
-                    <?php echo esc_html($link->altText) ?>
-                </label><br>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <?php sorted_checkbox_list(
+                'selected_links[]',
+            'Bislang verknüpfte Links: ',
+                $selected_links,
+            'Weitere Links: ',
+            $unselected_links,
+            'altText',
+            'Alle verfügbaren Links waren bereits ausgewählt. '
+        );?>
     </fieldset><br>
 
-    <?php if ($is_editing): ?>
-    <input type="hidden" name="category_id" value="<?php echo esc_attr($category_id) ?>">
-    <?php endif; ?>
-
-    <button type="submit" name="save_disability_category">Speichern</button>
-    <a href="<?php echo site_url('/behinderungskategorien-editieren')?>">
-        <button type="button">Abbrechen</button>
-    </a>
+    <?php if ($is_editing) id_field('category_id', $category_id); ?>
+    <?php close_buttons('save_disability_category', site_url('/behinderungskategorien-editieren'));?>
 </form>
 <?php
     return ob_get_clean();

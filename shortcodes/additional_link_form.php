@@ -51,21 +51,27 @@ function additional_link_form(): bool|string {
             'Dies ist ein übergreifender Link. '
         );?>
 
-        <?php checkbox_list(
-                'Passende Behinderungskategorien auswählen: ',
-            $disability_categories,
-            $selected_disability_category_ids,
-            'selected_disability_categories[]',
-            'name'
+        <fieldset>
+            <legend>Passende Behinderungskategorien auswählen: </legend>
+            <?php checkbox_list(
+                    $disability_categories,
+                    $selected_disability_category_ids,
+                    'selected_disability_categories[]',
+                    'name',
+                'Keine Behinderungskategorie vorhanden. '
         ); ?>
+        </fieldset>
 
-        <?php checkbox_list(
-                'Passende assistive Technologien auswählen: ',
-            $product_categories,
-            $selected_product_category_ids,
-            'selected_product_categories[]',
-            'name'
-        ); ?>
+        <fieldset>
+            <legend>Passende assistive Technologien auswählen: </legend>
+            <?php checkbox_list(
+                    $product_categories,
+                    $selected_product_category_ids,
+                    'selected_product_categories[]',
+                    'name',
+                'Keine assistiven Technologien vorhanden. '
+            ); ?>
+        </fieldset>
 
         <?php if ($is_editing) id_field('link_id', $link_id); ?>
         <?php close_buttons('save_link', site_url('/weiterfuehrende-links-editieren')); ?>

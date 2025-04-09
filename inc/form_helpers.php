@@ -24,18 +24,59 @@ function checkbox_input($field_name_and_id, $checked, $text): void {
     <?php
 }
 
-function checkbox_list($legend, $connection_items, $selected_items, $field_name, $display_attribute): void {
-    ?>
-    <fieldset>
-        <legend><?php echo $legend; ?></legend>
-        <?php foreach ($connection_items as $item): ?>
+function checkbox_list($connection_items, $selected_items, $field_name, $display_attribute, $empty_error = null): void {
+    if (!empty($connection_items)) {
+        foreach ($connection_items as $item) {
+            $is_checked = false;
+
+            if ($selected_items === 'all') {
+                $is_checked = true;
+            } elseif (is_array($selected_items)) {
+                $is_checked = in_array($item->id, $selected_items);
+            }
+
+            ?>
             <label>
                 <input type="checkbox" name="<?php echo $field_name; ?>" value="<?php echo esc_attr($item->id); ?>"
-                    <?php checked(in_array($item->id, $selected_items));  ?>>
+                    <?php checked($is_checked);  ?>>
                 <?php echo esc_html($item->{$display_attribute}); ?>
             </label><br>
-        <?php endforeach; ?>
-    </fieldset><br>
+            <?php
+        }
+        ?><br><?php
+    } elseif ($empty_error) {
+        ?><p><?php echo $empty_error; ?></p><?php
+    }
+}
+
+function sorted_checkbox_list($field_name, $selected_label, $selected_items, $unselected_label, $unselected_items, $display_attribute, $unselected_error, $empty_error = null): void {
+    if (!empty($selected_items)) {
+        ?>
+        <p><?php echo $selected_label; ?></p>
+        <?php checkbox_list($selected_items, 'all', $field_name, $display_attribute); ?>
+        <br>
+        <p><?php echo $unselected_label; ?></p>
+        <?php checkbox_list($unselected_items, 'none', $field_name, $display_attribute, $unselected_error);?>
+        <br>
+        <?php
+    } else {
+        checkbox_list($unselected_items, 'none',  $field_name, $display_attribute, $empty_error);
+    }
+}
+
+function text_input($field_name_and_id, $label, $maxlength, $required, $old_value): void {
+    ?>
+    <label for="<?php echo $field_name_and_id; ?>"><?php echo $label; ?> (max. <?php echo $maxlength; ?> Zeichen)</label>
+    <input type="text" id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" maxlength="<?php echo $maxlength; ?>" <?php if($required): ?> required <?php endif; ?>
+           value="<?php echo $old_value; ?>"><br><br>
+
+    <?php
+}
+
+function textarea_input($field_name_and_id, $label, $maxlength, $rows, $required, $old_value): void {
+    ?>
+    <label for="<?php echo $field_name_and_id; ?>"><?php echo $label; ?> (max. <?php echo $maxlength; ?> Zeichen): </label>
+    <textarea id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" maxlength="<?php echo $maxlength; ?>" rows="<?php echo esc_attr($rows); ?>" <?php if($required): ?> required <?php endif; ?>><?php echo $old_value; ?></textarea><br><br>
     <?php
 }
 
