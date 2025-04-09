@@ -1,6 +1,7 @@
 <?php
 
 require_once get_stylesheet_directory() . '/inc/display_helpers.php';
+require_once get_stylesheet_directory() . '/inc/form_helpers.php';
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
 
@@ -32,49 +33,42 @@ function additional_link_form(): bool|string {
     $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
     $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, 'name');
 
-
     ob_start();
     ?>
     <form method="post">
-        <label>URL: <input type="url" name="link_url" value="<?php echo $is_editing ? esc_url($current_link->URL) : ''; ?>"></label><br><br>
-        <label>Alternativtext (max. 255 Zeichen): <input type="text" name="link_alt" maxlength="255" value="<?php echo $is_editing ? esc_html($current_link->altText) : ''; ?>"></label><br><br>
+        <?php link_input(
+                'link_url',
+                'link_alt',
+                true,
+                255,
+            $is_editing ? esc_html($current_link->URL) : '',
+            $is_editing ? esc_html($current_link->altText) : ''
+        );?>
 
-        <label>
-            <input type="checkbox" name="comprehensive_link" id="comprehensive_link"
-                <?php checked($is_editing ? $current_link->comprehensive : false) ?>>
-            Dies ist ein übergreifender Link.
-        </label><br><br>
+        <?php checkbox_input(
+                'comprehensive_link',
+            $is_editing ? $current_link->comprehensive : false,
+            'Dies ist ein übergreifender Link. '
+        );?>
 
-        <fieldset>
-            <legend>Passende Behinderungskategorien auswählen:</legend>
-            <?php foreach ($disability_categories as $disability_category): ?>
-                <label>
-                    <input type="checkbox" name="selected_disability_categories[]" value="<?php echo esc_attr($disability_category->id); ?>"
-                        <?php checked(in_array($disability_category->id, $selected_disability_category_ids));  ?>>
-                    <?php echo esc_html($disability_category->name); ?>
-                </label><br>
-            <?php endforeach; ?>
-        </fieldset><br>
+        <?php checkbox_list(
+                'Passende Behinderungskategorien auswählen: ',
+            $disability_categories,
+            $selected_disability_category_ids,
+            'selected_disability_categories[]',
+            'name'
+        ); ?>
 
-        <fieldset>
-            <legend>Passende assistive Technologien auswählen:</legend>
-            <?php foreach ($product_categories as $product_category): ?>
-                <label>
-                    <input type="checkbox" name="selected_product_categories[]" value="<?php echo esc_attr($product_category->id); ?>"
-                        <?php checked(in_array($product_category->id, $selected_product_category_ids));  ?>>
-                    <?php echo esc_html($product_category->name); ?>
-                </label><br>
-            <?php endforeach; ?>
-        </fieldset><br>
+        <?php checkbox_list(
+                'Passende assistive Technologien auswählen: ',
+            $product_categories,
+            $selected_product_category_ids,
+            'selected_product_categories[]',
+            'name'
+        ); ?>
 
-        <?php if ($is_editing): ?>
-            <input type="hidden" name="link_id" value="<?php echo esc_attr($link_id) ?>">
-        <?php endif; ?>
-
-        <button type="submit" name="save_link">Speichern</button>
-        <a href="<?php echo site_url('/weiterfuehrende-links-editieren')?>">
-            <button type="button">Abbrechen</button>
-        </a>
+        <?php if ($is_editing) id_field('link_id', $link_id); ?>
+        <?php close_buttons('save_link', site_url('/weiterfuehrende-links-editieren')); ?>
     </form>
     <?php
     return ob_get_clean();
