@@ -66,7 +66,10 @@ ob_start();
     </fieldset><br>
 
     <?php if ($is_editing) id_field('category_id', $category_id); ?>
-    <?php close_buttons('save_disability_category', site_url('/behinderungskategorien-editieren'));?>
+    <?php close_buttons(
+            'save_disability_category',
+            site_url('/behinderungskategorien-editieren')
+    );?>
 </form>
 <?php
     return ob_get_clean();

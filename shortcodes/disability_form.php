@@ -66,10 +66,7 @@ function disability_form(): bool|string {
             );?>
         </fieldset><br>
 
-        <?php if ($is_editing) {
-            id_field('disability_id', $disability_id);
-        } ?>
-
+        <?php if ($is_editing) id_field('disability_id', $disability_id); ?>
         <?php close_buttons(
                 'save_disability',
                 site_url('/beeintraechtigungsformen-editieren')

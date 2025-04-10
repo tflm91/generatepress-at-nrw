@@ -74,7 +74,10 @@ function additional_link_form(): bool|string {
         </fieldset>
 
         <?php if ($is_editing) id_field('link_id', $link_id); ?>
-        <?php close_buttons('save_link', site_url('/weiterfuehrende-links-editieren')); ?>
+        <?php close_buttons(
+                'save_link',
+                site_url('/weiterfuehrende-links-editieren')
+        ); ?>
     </form>
     <?php
     return ob_get_clean();

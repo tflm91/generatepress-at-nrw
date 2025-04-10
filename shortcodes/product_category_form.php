@@ -11,7 +11,6 @@ function product_category_form(): bool|string {
     $disabilities = get_all(DISABILITY_TABLE, 'name');
     $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
     $products = get_all(PRODUCT_TABLE, 'name');
-    $links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
 
     $current_category = null;
     $selected_disability_ids = [];
@@ -20,10 +19,8 @@ function product_category_form(): bool|string {
     $selected_links = [];
     $unselected_links = [];
 
-
     if ($is_editing) {
         $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, $category_id);
-
         $selected_disability_ids = get_connected_ids(
             AIDS_WITH_DISABILITY_TABLE,
             'categoryId',
@@ -62,95 +59,84 @@ function product_category_form(): bool|string {
             $category_id,
             'altText'
         );
+    } else {
+        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
     }
 
     ob_start();
     ?>
     <form method="post">
-        <label for="category_name">Name der assistiven Technologie (max. 150 Zeichen)</label>
-        <input type="text" id="category_name" name="category_name" maxlength="150" required
-               value="<?php echo $is_editing ? esc_attr($current_category->name) : ''; ?>"><br><br>
+        <?php text_input(
+                'category_name',
+            'Name der assistiven Technologie',
+            150,
+            true,
+            $is_editing ? esc_attr($current_category->name) : ''
+        ); ?>
 
-        <label for="category_description">Beschreibung (max. 2000 Zeichen):</label>
-        <textarea id="category_description" name="category_description" maxlength="2000" rows="<?php echo esc_attr(TEXTAREA_ROW_COUNT)?>" required><?php echo $is_editing ? esc_attr($current_category->description) : ''; ?></textarea><br><br>
+        <?php textarea_input(
+                'category_description',
+            'Beschreibung',
+            2000,
+                TEXTAREA_ROW_COUNT,
+                false,
+            $is_editing ? esc_attr($current_category->description) : ''
+        ); ?>
 
         <fieldset>
             <legend>Unterstützte Beeinträchtigungsformen auswählen:</legend>
-            <?php foreach ($disabilities as $disability): ?>
-                <label>
-                    <input type="checkbox" name="selected_disabilities[]" value="<?php echo esc_attr($disability->id); ?>"
-                        <?php checked(in_array($disability->id, $selected_disability_ids));  ?>>
-                    <?php echo esc_html($disability->name); ?>
-                </label><br>
-            <?php endforeach; ?>
+            <?php checkbox_list(
+                    $disabilities,
+                    $selected_disability_ids,
+                    'selected_disabilities[]',
+                'name',
+                'Keine Beeinträchtigungsformen vorhanden. '
+            ); ?>
         </fieldset><br>
 
 
         <fieldset>
             <legend>Unterstützte Funktionseinschränkungen auswählen:</legend>
-            <?php foreach ($limitations as $limitation): ?>
-                <label>
-                    <input type="checkbox" name="selected_limitations[]" value="<?php echo esc_attr($limitation->id); ?>"
-                        <?php checked(in_array($limitation->id, $selected_limitation_ids));  ?>>
-                    <?php echo esc_html($limitation->name); ?>
-                </label><br>
-            <?php endforeach; ?>
+            <?php checkbox_list(
+                    $limitations,
+                $selected_limitation_ids,
+                'selected_limitations[]',
+                'name',
+                'Keine Funktionseinschränkungen vorhanden. '
+            ); ?>
         </fieldset><br>
 
 
         <fieldset>
             <legend>Passende Produkte auswählen:</legend>
-            <?php foreach ($products as $product): ?>
-                <label>
-                    <input type="checkbox" name="selected_products[]" value="<?php echo esc_attr($product->id); ?>"
-                        <?php checked(in_array($product->id, $selected_product_ids));  ?>>
-                    <?php echo esc_html($product->name); ?>
-                </label><br>
-            <?php endforeach; ?>
+            <?php checkbox_list(
+                    $products,
+                $selected_product_ids,
+                'selected_products[]',
+                'name',
+                'Keine Produkte vorhanden. '
+            ); ?>
         </fieldset><br>
 
         <fieldset>
             <legend>Weiterführende Links auswählen:</legend>
-            <?php if ($is_editing && !empty($selected_links)): ?>
-            <p>Bislang verknüpfte Links: </p>
-            <?php foreach ($selected_links as $link): ?>
-                <label>
-                    <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>"
-                    checked >
-                    <?php echo esc_html($link->altText) ?>
-                </label><br>
-            <?php endforeach; ?>
-            <br>
-            <p>Weitere Links: </p>
-            <?php if(!empty($unselected_links)): ?>
-            <?php foreach ($unselected_links as $link): ?>
-                <label>
-                    <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>">
-                    <?php echo esc_html($link->altText) ?>
-                </label><br>
-            <?php endforeach; ?>
-            <?php else: ?>
-                <p>Alle verfügbaren Links waren bereits ausgewählt: </p>
-            <?php endif; ?>
-            <?php else: ?>
-                <?php foreach ($links as $link): ?>
-                    <label>
-                        <input type="checkbox" name="selected_links[]" value="<?php echo esc_attr($link->id); ?>">
-                        <?php echo esc_html($link->altText) ?>
-                    </label><br>
-                <?php endforeach; ?>
-            <?php endif; ?>
+            <?php sorted_checkbox_list(
+                'selected_links[]',
+                'Bislang verknüpfte Links: ',
+                $selected_links,
+                'Weitere Links: ',
+                $unselected_links,
+                'altText',
+                'Alle verfügbaren Links waren bereits ausgewählt. ',
+                'Keine weiterführenden Links vorhanden. '
+            );?>
         </fieldset><br>
 
-
-        <?php if ($is_editing): ?>
-            <input type="hidden" name="category_id" value="<?php echo esc_attr($category_id) ?>">
-        <?php endif; ?>
-
-        <button type="submit" name="save_product_category">Speichern</button>
-        <a href="<?php echo site_url('/assistive-technologien-editieren')?>">
-            <button type="button">Abbrechen</button>
-        </a>
+        <?php if($is_editing) id_field('category_id', $category_id);?>
+       <?php close_buttons(
+               'save_product_category',
+               site_url('/assistive-technologien-editieren')
+       );?>
     </form>
     <?php
     return ob_get_clean();

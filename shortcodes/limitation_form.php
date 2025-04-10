@@ -3,6 +3,7 @@
 require_once get_stylesheet_directory() . '/inc/display_helpers.php';
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
+require_once get_stylesheet_directory() . '/inc/form_helpers.php';
 
 function limitation_form(): bool|string {
     $limitation_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -26,29 +27,30 @@ function limitation_form(): bool|string {
     ob_start();
     ?>
     <form method="post">
-        <label for="limitation_name">Name der Funktionseinschränkung (max. 100 Zeichen) </label>
-        <input type="text" id="limitation_name" name="limitation_name" maxlength="100" required
-               value="<?php echo $is_editing ? esc_attr($current_limitation->name) : ''; ?>"><br><br>
+        <?php text_input(
+                'limitation_name',
+            'Name der Funktionseinschränkung',
+            100,
+            true,
+            $is_editing ? esc_attr($current_limitation->name) : ''
+        ); ?>
 
         <fieldset>
             <legend>Passende assistive Technologien auswählen:</legend>
-            <?php foreach ($product_categories as $product_category): ?>
-                <label>
-                    <input type="checkbox" name="selected_categories[]" value="<?php echo esc_attr($product_category->id); ?>"
-                        <?php checked(in_array($product_category->id, $selected_product_category_ids));  ?>>
-                    <?php echo esc_html($product_category->name); ?>
-                </label><br>
-            <?php endforeach; ?>
+            <?php checkbox_list(
+                    $product_categories,
+                $selected_product_category_ids,
+                'selected_product_categories[]',
+                'name',
+                'Keine assistiven Technologien vorhanden'
+            ); ?>
         </fieldset><br>
 
-        <?php if ($is_editing): ?>
-            <input type="hidden" name="limitation_id" value="<?php echo esc_attr($limitation_id) ?>">
-        <?php endif; ?>
-
-        <button type="submit" name="save_limitation">Speichern</button>
-        <a href="<?php echo site_url('/funktionseinschraenkungen-editieren')?>">
-            <button type="button">Abbrechen</button>
-        </a>
+        <?php if ($is_editing) id_field('limitation_id', $limitation_id); ?>
+        <?php close_buttons(
+                'save_limitation',
+                site_url('/funktionseinschraenkungen-editieren')
+        ); ?>
     </form>
     <?php
     return ob_get_clean();
