@@ -80,6 +80,21 @@ function textarea_input($field_name_and_id, $label, $maxlength, $rows, $required
     <?php
 }
 
+function select_input($field_name_and_id, $label, $required, $display_attribute, $options, $selected_option = null): void {
+    ?>
+    <label for="<?php echo $field_name_and_id; ?>"><?php echo $label; ?></label>
+    <select id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" <?php if($required): ?> required <?php endif; ?>>
+        <?php foreach ($options as $option): ?>
+            <?php if ($selected_option && $option->id == $selected_option): ?>
+                <option value="<?php echo esc_attr($option->id)?>" selected><?php echo esc_html($option->{$display_attribute})?></option>
+            <?php else: ?>
+                <option value="<?php echo esc_attr($option->id)?>"><?php echo esc_html($option->{$display_attribute})?></option>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </select><br><br>
+    <?php
+}
+
 function id_field($name, $id): void {
      ?> <input type="hidden" name="<?php echo $name?>" value="<?php echo esc_attr($id) ?>"><?php
 }

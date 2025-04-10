@@ -3,6 +3,7 @@
 require_once get_stylesheet_directory() . '/inc/display_helpers.php';
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
+require_once get_stylesheet_directory() . '/inc/form_helpers.php';
 
 function disability_form(): bool|string {
     $disability_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -24,47 +25,55 @@ function disability_form(): bool|string {
     $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, 'name');
     $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
 
-
     ob_start();
     ?>
     <form method="post">
-        <label for="disability_name">Name der Beeinträchtigungsform (max. 50 Zeichen) </label>
-        <input type="text" id="disability_name" name="disability_name" required maxlength="50"
-               value="<?php echo $is_editing ? esc_attr($current_disability->name) : ''; ?>"><br><br>
+        <?php text_input(
+                'disability_name',
+            'Name der Beeinträchtigungsform',
+            50,
+            true,
+            $is_editing ? esc_attr($current_disability->name) : ''
+        ); ?>
 
-        <label for="disability_category">Behinderungskategorie</label>
-        <select id="disability_category" name="disability_category" required>
-            <?php foreach ($disability_categories as $category): ?>
-            <?php if ($is_editing && $category->id == $current_disability->categoryId): ?>
-                <option value="<?php echo esc_attr($category->id)?>" selected><?php echo esc_html($category->name)?></option>
-        <?php else: ?>
-                <option value="<?php echo esc_attr($category->id)?>"><?php echo esc_html($category->name)?></option>
-        <?php endif; ?>
-            <?php endforeach; ?>
-        </select><br><br>
+        <?php select_input(
+                'disability_category',
+            'Behinderungskategorie',
+            true,
+            'name',
+            $disability_categories,
+            $is_editing ? $current_disability->categoryId : null
+        );
+        ?>
 
-        <label for="disability_description">Beschreibung (max. 2500 Zeichen):</label>
-        <textarea id="disability_description" name="disability_description" maxlength="2500" rows="<?php echo esc_attr(TEXTAREA_ROW_COUNT)?>" required><?php echo $is_editing ? esc_attr($current_disability->description) : ''; ?></textarea><br><br>
+        <?php textarea_input(
+                'disability_description',
+            'Beschreibung',
+            2500,
+            TEXTAREA_ROW_COUNT,
+                false,
+            $is_editing ? $current_disability->description : ''
+        ) ?>
 
         <fieldset>
             <legend>Passende assistive Technologien auswählen:</legend>
-            <?php foreach ($product_categories as $product_category): ?>
-                <label>
-                    <input type="checkbox" name="selected_categories[]" value="<?php echo esc_attr($product_category->id); ?>"
-                        <?php checked(in_array($product_category->id, $selected_product_category_ids));  ?>>
-                    <?php echo esc_html($product_category->name); ?>
-                </label><br>
-            <?php endforeach; ?>
+            <?php checkbox_list(
+                    $product_categories,
+                    $selected_product_category_ids,
+                    'selected_product_categories[]',
+                    'name',
+                    'Keine assistiven Technologien vorhanden. '
+            );?>
         </fieldset><br>
 
-        <?php if ($is_editing): ?>
-            <input type="hidden" name="disability_id" value="<?php echo esc_attr($disability_id) ?>">
-        <?php endif; ?>
+        <?php if ($is_editing) {
+            id_field('disability_id', $disability_id);
+        } ?>
 
-        <button type="submit" name="save_disability">Speichern</button>
-        <a href="<?php echo site_url('/beeintraechtigungsformen-editieren')?>">
-            <button type="button">Abbrechen</button>
-        </a>
+        <?php close_buttons(
+                'save_disability',
+                site_url('/beeintraechtigungsformen-editieren')
+        ); ?>
     </form>
     <?php
     return ob_get_clean();

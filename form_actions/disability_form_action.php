@@ -9,7 +9,7 @@ function save_disability(): void {
         $name = sanitize_text_field($_POST['disability_name']);
         $category_id = intval($_POST['disability_category']);
         $description = sanitize_textarea_field($_POST['disability_description']);
-        $selected_categories = $_POST['selected_categories'] ?? [];
+        $selected_product_categories = $_POST['selected_product_categories'] ?? [];
 
         if (!empty($_POST['disability_id'])) {
             $disability_id = intval($_POST['disability_id']);
@@ -30,7 +30,7 @@ function save_disability(): void {
             $disability_id = $wpdb->insert_id;
         }
 
-        foreach ($selected_categories as $product_category_id) {
+        foreach ($selected_product_categories as $product_category_id) {
             $wpdb->insert(AIDS_WITH_DISABILITY_TABLE, [
                 'impairmentId' => $disability_id,
                 'categoryId' => $product_category_id
