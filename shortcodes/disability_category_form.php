@@ -7,7 +7,6 @@ require_once get_stylesheet_directory() . '/constants.php';
 function disability_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
-    $selected_links = [];
 
     if ($is_editing) {
         $current_category = get_by_id(DISABILITY_CATEGORY_TABLE, $category_id);
@@ -57,7 +56,7 @@ ob_start();
         <?php sorted_checkbox_list(
                 'selected_links[]',
             'Bislang verknüpfte Links: ',
-                $selected_links,
+                $is_editing ? $selected_links : 'none',
             'Weitere Links: ',
             $unselected_links,
             'altText',

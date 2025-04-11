@@ -12,13 +12,6 @@ function product_category_form(): bool|string {
     $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
     $products = get_all(PRODUCT_TABLE, 'name');
 
-    $current_category = null;
-    $selected_disability_ids = [];
-    $selected_limitation_ids = [];
-    $selected_product_ids = [];
-    $selected_links = [];
-    $unselected_links = [];
-
     if ($is_editing) {
         $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, $category_id);
         $selected_disability_ids = get_connected_ids(
@@ -87,7 +80,7 @@ function product_category_form(): bool|string {
             <legend>Unterstützte Beeinträchtigungsformen auswählen:</legend>
             <?php checkbox_list(
                     $disabilities,
-                    $selected_disability_ids,
+                    $is_editing ? $selected_disability_ids : 'none',
                     'selected_disabilities[]',
                 'name',
                 'Keine Beeinträchtigungsformen vorhanden. '
@@ -99,7 +92,7 @@ function product_category_form(): bool|string {
             <legend>Unterstützte Funktionseinschränkungen auswählen:</legend>
             <?php checkbox_list(
                     $limitations,
-                $selected_limitation_ids,
+                $is_editing ? $selected_limitation_ids : 'none',
                 'selected_limitations[]',
                 'name',
                 'Keine Funktionseinschränkungen vorhanden. '
@@ -111,10 +104,10 @@ function product_category_form(): bool|string {
             <legend>Passende Produkte auswählen:</legend>
             <?php checkbox_list(
                     $products,
-                $selected_product_ids,
-                'selected_products[]',
-                'name',
-                'Keine Produkte vorhanden. '
+                    $is_editing ? $selected_product_ids : 'none',
+                    'selected_products[]',
+                    'name',
+                    'Keine Produkte vorhanden. '
             ); ?>
         </fieldset><br>
 
@@ -123,7 +116,7 @@ function product_category_form(): bool|string {
             <?php sorted_checkbox_list(
                 'selected_links[]',
                 'Bislang verknüpfte Links: ',
-                $selected_links,
+                $is_editing ? $selected_links : 'none',
                 'Weitere Links: ',
                 $unselected_links,
                 'altText',

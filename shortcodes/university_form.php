@@ -9,9 +9,6 @@ function university_form(): bool|string {
     $university_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($university_id > 0);
 
-    $current_university = null;
-    $selected_product_ids = [];
-
     if ($is_editing) {
         $current_university = get_by_id(UNIVERSITY_TABLE, $university_id);
         $selected_product_ids = get_connected_ids(
@@ -97,7 +94,7 @@ function university_form(): bool|string {
             <p>Folgende Produkte können ausgewählt werden: </p>
             <?php checkbox_list(
                     $non_general_products,
-                $selected_product_ids,
+                $is_editing ? $selected_product_ids : 'none',
                 'selected_products[]',
                 'name',
                 'Es sind keine Produkte vorhanden, die ausgewählt werden können. '

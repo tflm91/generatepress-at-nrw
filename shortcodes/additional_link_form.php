@@ -9,10 +9,6 @@ function additional_link_form(): bool|string {
     $link_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($link_id > 0);
 
-    $current_link = null;
-    $selected_product_category_ids = [];
-    $selected_disability_category_ids = [];
-
     if ($is_editing) {
         $current_link = get_by_id(ADDITIONAL_LINK_TABLE, $link_id);
         $selected_product_category_ids = get_connected_ids(

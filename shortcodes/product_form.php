@@ -9,10 +9,6 @@ function product_form(): bool|string {
     $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($product_id > 0);
 
-    $current_product = null;
-    $selected_product_category_ids = [];
-    $selected_university_ids = [];
-
     if ($is_editing) {
         $current_product = get_by_id(PRODUCT_TABLE, $product_id);
         $selected_product_category_ids = get_connected_ids(
@@ -68,7 +64,7 @@ function product_form(): bool|string {
             <legend>Passende assistiven Technologien auswählen:</legend>
             <?php checkbox_list(
                     $product_categories,
-                $selected_product_category_ids,
+                $is_editing ? $selected_product_category_ids : 'none',
                 'selected_product_categories[]',
                 'name',
                 'Keine assistiven Technologien vorhanden'
@@ -85,7 +81,7 @@ function product_form(): bool|string {
             <legend>Hochschulen auswählen, die dieses Produkt anbieten:</legend>
             <?php checkbox_list(
                     $universities,
-                $selected_university_ids,
+                    $is_editing ? $selected_university_ids :  'none',
                 'selected_universities[]',
                 'name',
                 'Keine Hochschulen vorhanden'

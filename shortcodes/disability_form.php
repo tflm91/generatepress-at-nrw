@@ -9,9 +9,6 @@ function disability_form(): bool|string {
     $disability_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($disability_id > 0);
 
-    $current_disability = null;
-    $selected_product_category_ids = [];
-
     if ($is_editing) {
         $current_disability = get_by_id(DISABILITY_TABLE, $disability_id);
         $selected_product_category_ids = get_connected_ids(
@@ -59,7 +56,7 @@ function disability_form(): bool|string {
             <legend>Passende assistive Technologien auswählen:</legend>
             <?php checkbox_list(
                     $product_categories,
-                    $selected_product_category_ids,
+                    $is_editing ? $selected_product_category_ids : 'none',
                     'selected_product_categories[]',
                     'name',
                     'Keine assistiven Technologien vorhanden. '

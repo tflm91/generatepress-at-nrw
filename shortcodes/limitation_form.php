@@ -9,9 +9,6 @@ function limitation_form(): bool|string {
     $limitation_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($limitation_id > 0);
 
-    $current_limitation = null;
-    $selected_product_category_ids = [];
-
     if ($is_editing) {
         $current_limitation = get_by_id(FUNCTIONAL_LIMITATION_TABLE, $limitation_id, 'name');
         $selected_product_category_ids = get_connected_ids(
@@ -39,10 +36,10 @@ function limitation_form(): bool|string {
             <legend>Passende assistive Technologien auswählen:</legend>
             <?php checkbox_list(
                     $product_categories,
-                $selected_product_category_ids,
-                'selected_product_categories[]',
-                'name',
-                'Keine assistiven Technologien vorhanden'
+                    $is_editing ? $selected_product_category_ids : 'none',
+                    'selected_product_categories[]',
+                    'name',
+                    'Keine assistiven Technologien vorhanden'
             ); ?>
         </fieldset><br>
 
