@@ -95,6 +95,25 @@ function select_input($field_name_and_id, $label, $required, $display_attribute,
     <?php
 }
 
+function phone_input($number_field_name, $old_phone_number, $required, $alt_field_name, $old_alt): void {
+    ?>
+    <b>Telefonnummer: </b><br>
+    <label>Telefonnummer im internationalen Format: <input type="tel" name="<?php echo $number_field_name; ?>"
+                                                           pattern="\+{1-9}{0-9}+" maxlength="20"
+                                                           value="<?php echo $old_phone_number; ?>"
+                                                           <?php if($required): ?> required <?php endif; ?>"></label><br><br>
+    <label>Alternativtext (max. 20 Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="20" value="<?php echo $old_alt; ?>"></label><br><br>
+    <?php
+}
+
+function mail_input($field_name_and_id, $required, $old_email): void {
+    ?>
+    <label for="<?php echo $field_name_and_id; ?>">E-Mail-Adresse</label>
+    <input type="email" id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" <?php if($required): ?> required <?php endif; ?> maxlength="255"
+           value="<?php echo $old_email;?>"><br><br>
+    <?php
+}
+
 function id_field($name, $id): void {
      ?> <input type="hidden" name="<?php echo $name?>" value="<?php echo esc_attr($id) ?>"><?php
 }
