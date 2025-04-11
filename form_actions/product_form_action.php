@@ -10,7 +10,7 @@ function save_product(): void {
         $description = sanitize_textarea_field($_POST['product_description']);
         $info_url = esc_url_raw($_POST['product_info_url']);
         $info_alt = sanitize_text_field($_POST['product_info_alt']);
-        $selected_categories = $_POST['selected_categories'] ?? [];
+        $selected_product_categories = $_POST['selected_product_categories'] ?? [];
         $available_general = isset($_POST['available_general']);
         $selected_universities = $_POST['selected_universities'] ?? [];
         $hidden = isset($_POST['hidden']);
@@ -39,7 +39,7 @@ function save_product(): void {
             $product_id = $wpdb->insert_id;
         }
 
-        foreach ($selected_categories as $product_category_id) {
+        foreach ($selected_product_categories as $product_category_id) {
             $wpdb->insert(CATEGORY_OF_PRODUCT_TABLE, [
                 'productId' => $product_id,
                 'categoryId' => $product_category_id
