@@ -3,6 +3,7 @@
 require_once get_stylesheet_directory() . '/inc/database.php';
 require_once get_stylesheet_directory() . '/constants.php';
 require_once get_stylesheet_directory() . '/shortcodes/list_editable_items.php';
+require_once get_stylesheet_directory() . '/shortcodes/item_delete_modal.php';
 
 add_shortcode('list_editable_disabilities', 'list_editable_disabilities');
 
