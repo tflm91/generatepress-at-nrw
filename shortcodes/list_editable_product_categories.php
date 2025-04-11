@@ -14,7 +14,7 @@ function list_editable_product_categories(): string {
         'display_by_name',
         'assistive-technologie-bearbeiten',
         'delete-product-category',
-        'Assistive Technologien'
+        'assistiven Technologien'
     );
 }
 
@@ -26,7 +26,7 @@ function delete_product_category_script(): void {
 
     generate_modal_content_script(
             'generateProductCategoryModal',
-        'Assistive Technologie',
+        'diese assistive Technologie',
         'deleteProductCategory',
     );
 

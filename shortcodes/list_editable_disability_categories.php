@@ -51,8 +51,17 @@ function disability_category_modal(): void {
 }
 
 function delete_disability_category_script(): void {
-    generate_delete_function('deleteDisabilityCategory', 'delete_disability_category');
-    generate_modal_content_script('generateDisabilityCategoryModal', 'Behinderungskategorie', 'deleteDisabilityCategory');
+    generate_delete_function(
+            'deleteDisabilityCategory',
+            'delete_disability_category'
+    );
+
+    generate_modal_content_script(
+            'generateDisabilityCategoryModal',
+            'diese Behinderungskategorie',
+            'deleteDisabilityCategory'
+    );
+
     disability_category_modal();
 }
 

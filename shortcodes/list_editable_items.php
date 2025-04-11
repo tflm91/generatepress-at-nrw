@@ -64,12 +64,12 @@ function generate_delete_function($delete_function_name, $delete_action_name): v
     <?php
 }
 
-function generate_modal_content_script($modal_content_function_name, $item_singular, $delete_function_name): void {
+function generate_modal_content_script($modal_content_function_name, $item_with_article, $delete_function_name): void {
     ?>
     <script>
         function <?php echo $modal_content_function_name ?>(modalContent, itemId) {
             modalContent.innerHTML = "<span class='close' onclick='closeDialogue()'>&times;</span>" +
-                "<p>Bist du sicher, dass du diese <?php echo $item_singular ?> löschen möchtest?</p>" +
+                "<p>Bist du sicher, dass du <?php echo $item_with_article ?> löschen möchtest?</p>" +
                 "<button onclick='<?php echo $delete_function_name ?>(" + itemId + ")'>Ja</button> " +
                 "<button onclick='closeDialogue()'>Abbrechen</button>";
         }

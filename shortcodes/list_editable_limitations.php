@@ -26,7 +26,7 @@ function delete_limitation_script(): void {
 
     generate_modal_content_script(
             'generateLimitationModal',
-            'Funktionseinschränkung',
+            'diese Funktionseinschränkung',
             'deleteLimitation'
     );
 

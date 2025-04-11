@@ -19,9 +19,21 @@ function list_editable_disabilities(): string {
 }
 
 function delete_disability_script(): void {
-    generate_delete_function('deleteDisability', 'delete_disability');
-    generate_modal_content_script('generateDisabilityModal', 'Beeinträchtigungsform', 'deleteDisability');
-    delete_empty_item_script('delete-disability', 'generateDisabilityModal');
+    generate_delete_function(
+        'deleteDisability',
+        'delete_disability'
+    );
+
+    generate_modal_content_script(
+        'generateDisabilityModal',
+        'diese Beeinträchtigungsform',
+        'deleteDisability'
+    );
+
+    delete_empty_item_script(
+        'delete-disability',
+        'generateDisabilityModal'
+    );
 }
 
 add_action('wp_footer', 'delete_disability_script');
