@@ -5,5 +5,4 @@ require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/form_actions.php';
 require_once get_stylesheet_directory() . '/inc/footer.php';
 require_once get_stylesheet_directory() . '/inc/logout.php';
-require_once get_stylesheet_directory() . '/inc/javascript.php';
 ?>
