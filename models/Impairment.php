@@ -1,0 +1,37 @@
+<?php
+
+require_once get_stylesheet_directory() . '/core/display_helpers.php';
+require_once get_stylesheet_directory() . '/core/database.php';
+require_once get_stylesheet_directory() . '/core/constants.php';
+
+class Impairment {
+    public int $id;
+    public string $name;
+    public string $connection_table;
+
+    public function __construct(int $id, string $name, string $connection_table) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->connection_table = $connection_table;
+    }
+
+    function find_suitable_aids() {
+        return get_connected(
+            $this->connection_table,
+            'impairmentId',
+            PRODUCT_CATEGORY_TABLE,
+            'categoryId',
+            $this->id,
+            order_by: 'name'
+        );
+    }
+
+    function list_suitable_aids(): string {
+        return generate_item_list(
+            $this->find_suitable_aids(),
+            'assistive-technologien',
+            error: 'Keine passenden assistiven Technologien gefunden. ',
+            id_prefix: 'category'
+        );
+    }
+}
