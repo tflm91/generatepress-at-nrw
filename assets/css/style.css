@@ -1,3 +1,9 @@
+.main-navigation .main-nav ul li a {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+/* the dialogue window for the deletion of items */
 #delete-dialogue {
     display: none;
     position: fixed;
