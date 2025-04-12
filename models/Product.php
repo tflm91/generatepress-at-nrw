@@ -28,7 +28,7 @@ class Product {
             UNIVERSITY_TABLE,
             'universityId',
             $this->id,
-            'name'
+            order_by: 'name'
         );
     }
 

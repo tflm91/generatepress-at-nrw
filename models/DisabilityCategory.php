@@ -27,7 +27,7 @@ class DisabilityCategory {
             ADDITIONAL_LINK_TABLE,
             'linkId',
             $this->id,
-            'altText'
+            order_by: 'altText'
         );
 
         if (!empty($additional_links)) {

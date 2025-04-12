@@ -21,7 +21,7 @@ function show_detailed_product_information($product_id): string {
     $row = get_by_id(PRODUCT_TABLE, $product_id);
 
     $output = "<div>\n";
-    if ($row) {
+    if ($row && $row->hidden == 0) {
         $product = new Product(
             $row->id ?? 0,
             $row->name ?? 'Unbekannt',
@@ -60,7 +60,15 @@ function list_categories(): string {
 function display_product_category_information($row): string {
     $output = "";
 
-    if (has_connected_objects(CATEGORY_OF_PRODUCT_TABLE, 'categoryId', $row->id)) {
+    if (has_connected_objects(
+        CATEGORY_OF_PRODUCT_TABLE,
+        'categoryId',
+        PRODUCT_TABLE,
+        'productId',
+        $row->id,
+        'hidden',
+        0
+    )) {
         $category = new ProductCategory(
             $row->id ?? 0,
             $row->name ?? 'Unbekannt',
@@ -88,5 +96,12 @@ function list_products_without_category(): string {
 
 /* find products without product category */
 function find_products_without_category() {
-    return get_unconnected_objects(PRODUCT_TABLE, CATEGORY_OF_PRODUCT_TABLE, 'productId', 'name');
+    return get_unconnected_objects(
+        PRODUCT_TABLE,
+        CATEGORY_OF_PRODUCT_TABLE,
+        'productId',
+        'hidden',
+        0,
+        'name'
+    );
 }

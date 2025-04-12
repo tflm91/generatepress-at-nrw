@@ -47,7 +47,7 @@ class University {
             PRODUCT_TABLE,
             'productId',
             $this->id,
-            'name'
+            order_by: 'name'
         );
     }
 

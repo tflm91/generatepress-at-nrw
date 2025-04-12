@@ -22,7 +22,7 @@ class Impairment {
             PRODUCT_CATEGORY_TABLE,
             'categoryId',
             $this->id,
-            'name'
+            order_by: 'name'
         );
     }
 

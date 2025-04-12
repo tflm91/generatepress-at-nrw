@@ -39,10 +39,23 @@ function get_by_category($table, $category_id, $order_by = null) {
 }
 
 /* retrieve all objects of an m:n-connection */
-function get_connected($connection_table, $search_column, $target_table, $connection_column, $search_id, $order_by = null) {
+function get_connected(
+    $connection_table,
+    $search_column,
+    $target_table,
+    $connection_column,
+    $search_id,
+    $condition_column = null,
+    $condition_value = null,
+    $order_by = null
+) {
     $query = "SELECT {$target_table}.* FROM {$target_table}"
               . " JOIN {$connection_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
               . " WHERE {$connection_table}.{$search_column} = %d";
+
+    if ($condition_column) {
+        $query .= " AND {$condition_column} = {$condition_value}";
+    }
 
     if ($order_by) {
         $query .= " ORDER BY {$order_by}";
@@ -75,16 +88,41 @@ function category_has_objects($table, $category_id): bool {
 }
 
 /* check if an item has connected objects */
-function has_connected_objects($connection_table, $search_column, $search_id): bool {
-    $query = "SELECT COUNT(*) AS count FROM $connection_table WHERE {$search_column} = %d";
-    $result = query_database($query, [$search_id], true);
-    return $result->count > 0;
+    function has_connected_objects(
+    $connection_table,
+    $search_column,
+    $target_table,
+    $connection_column,
+    $search_id,
+    $condition_column = null,
+    $condition_value = null
+): bool {
+        $query = "SELECT COUNT(*) AS count FROM {$connection_table}"
+            . " JOIN {$target_table} ON {$connection_table}.{$connection_column} = {$target_table}.id"
+            . " WHERE {$connection_table}.{$search_column} = %d";
+
+        if ($condition_column) {
+            $query .= " AND {$condition_column} = {$condition_value}";
+        }
+
+        $result =  query_database($query, [$search_id], true);
+        return $result->count > 0;
 }
 
 /* list all objects without m:n-connection */
-function get_unconnected_objects($main_table, $connection_table, $main_id_column, $order_by = null) {
+function get_unconnected_objects(
+    $main_table,
+    $connection_table,
+    $main_id_column,
+    $conditional_column = null,
+    $conditional_value = null,
+    $order_by = null) {
     $query = "SELECT * FROM $main_table WHERE id NOT IN"
         . " (SELECT DISTINCT {$main_id_column} FROM $connection_table)";
+
+    if ($conditional_column) {
+        $query .= " AND {$main_table}.{$conditional_column} = {$conditional_value}";
+    }
 
     if ($order_by) {
         $query .= " ORDER BY {$order_by}";

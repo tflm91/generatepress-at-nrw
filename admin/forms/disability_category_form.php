@@ -16,7 +16,7 @@ function disability_category_form(): bool|string {
             ADDITIONAL_LINK_TABLE,
             'linkId',
             $category_id,
-            'altText'
+            order_by:'altText'
         );
 
         $unselected_links = get_unconnected_to_object(
