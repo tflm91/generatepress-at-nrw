@@ -21,7 +21,7 @@ function show_detailed_product_information($product_id): string {
     $row = get_by_id(PRODUCT_TABLE, $product_id);
 
     $output = "<div>\n";
-    if ($row && $row->hidden == 0) {
+    if ($row && !$row->hidden) {
         $product = new Product(
             $row->id ?? 0,
             $row->name ?? 'Unbekannt',
@@ -66,7 +66,7 @@ function display_product_category_information($row): string {
         PRODUCT_TABLE,
         'productId',
         $row->id,
-        ['hidden' => 0]
+        ['hidden' => false]
     )) {
         $category = new ProductCategory(
             $row->id ?? 0,
@@ -99,8 +99,7 @@ function find_products_without_category() {
         PRODUCT_TABLE,
         CATEGORY_OF_PRODUCT_TABLE,
         'productId',
-        'hidden',
-        0,
+        ['hidden' => false],
         'name'
     );
 }

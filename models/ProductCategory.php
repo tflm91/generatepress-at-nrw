@@ -45,7 +45,7 @@ class ProductCategory {
             PRODUCT_TABLE,
             'productId',
             $this->id,
-            ['hidden' => 0],
+            ['hidden' => false],
             'name'
         );
     }

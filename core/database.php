@@ -132,21 +132,29 @@ function get_unconnected_objects(
     $main_table,
     $connection_table,
     $main_id_column,
-    $conditional_column = null,
-    $conditional_value = null,
+    $conditions = [],
     $order_by = null) {
+
+    $where_clauses = [];
+    $params = [];
+
+    foreach ($conditions as $column => $value) {
+        $where_clauses[] = "$column = %s";
+        $params[] = $value;
+    }
+
     $query = "SELECT * FROM $main_table WHERE id NOT IN"
         . " (SELECT DISTINCT {$main_id_column} FROM $connection_table)";
 
-    if ($conditional_column) {
-        $query .= " AND {$main_table}.{$conditional_column} = {$conditional_value}";
+    if (!empty($where_clauses)) {
+        $query .= ' AND ' . implode(' AND ', $where_clauses);
     }
 
     if ($order_by) {
         $query .= " ORDER BY {$order_by}";
     }
 
-    return query_database($query);
+    return query_database($query, $params);
 }
 
 /* list all objects which are not m:n-connected to a specified object */

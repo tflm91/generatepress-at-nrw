@@ -52,7 +52,7 @@ function construct_university_from_row($row): University {
 function list_general_aids(): string {
     $before_html =  '<h4>Allgemein verfügbare Produkte</h4>';
     return generate_item_list(
-        get_all(PRODUCT_TABLE, ['availableGeneral' => true], order_by: 'name'),
+        get_all(PRODUCT_TABLE, ['availableGeneral' => true, 'hidden' => false], order_by: 'name'),
         "assistive-technologien",
         $before_html
     );
