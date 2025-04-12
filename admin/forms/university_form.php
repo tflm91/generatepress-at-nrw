@@ -19,7 +19,7 @@ function university_form(): bool|string {
     }
 
     $general_products = get_all(PRODUCT_TABLE, ['availableGeneral' => true], order_by: 'name');
-    $non_general_products = get_all(PRODUCT_TABLE, ['availableGeneral' => false], order_by: 'name');
+    $products = get_all(PRODUCT_TABLE,  order_by: 'name');
     ob_start();
     ?>
     <form method="post">
@@ -83,7 +83,16 @@ function university_form(): bool|string {
         <fieldset>
             <legend>Angebotene Produkte auswählen:</legend>
             <div>
-                <p>Folgende Produkte sind allgemein verfügbar und können daher nicht für diese Hochschule ausgewählt werden: </p>
+                <p>Die folgenden Produkte sind aktuell als <i>allgemein
+                    verfügbar</i> markiert. Das bedeutet: Auch wenn du
+                    sie für diese Hochschule auswählst, erscheinen sie
+                    für Endnutzer nicht unter der Hochschule, sondern
+                    werden als hochschulunabhängig angezeigt.
+
+                    Wenn du möchtest, dass ein Produkt explizit dieser
+                    Hochschule zugeordnet wird, entferne bitte die
+                    Markierung <i>„allgemein verfügbar“</i> im Bereich <b>Produkte
+                        editieren</b>.
                 <ul>
                     <?php foreach ($general_products as $product): ?>
                         <li><?php echo esc_html($product->name)?></li>
@@ -92,7 +101,7 @@ function university_form(): bool|string {
             </div>
             <p>Folgende Produkte können ausgewählt werden: </p>
             <?php checkbox_list(
-                    $non_general_products,
+                    $products,
                 $is_editing ? $selected_product_ids : [],
                 'selected_products[]',
                 'name',

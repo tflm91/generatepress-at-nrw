@@ -47,7 +47,7 @@ class University {
             PRODUCT_TABLE,
             'productId',
             $this->id,
-            ['hidden' => false],
+            ['hidden' => false, 'availableGeneral' => false],
             order_by: 'name'
         );
     }
