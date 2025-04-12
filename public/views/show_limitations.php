@@ -7,7 +7,7 @@ require_once get_stylesheet_directory() . '/core/constants.php';
 add_shortcode("limitations", "show_limitations");
 
 function show_limitations(): string {
-    $rows = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
+    $rows = get_all(FUNCTIONAL_LIMITATION_TABLE, order_by: 'name');
     $output = "<div>\n";
     if ($rows) {
         foreach ($rows as $row) {

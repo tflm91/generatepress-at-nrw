@@ -19,7 +19,7 @@ function limitation_form(): bool|string {
         );
     }
 
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, order_by: 'name');
 
     ob_start();
     ?>

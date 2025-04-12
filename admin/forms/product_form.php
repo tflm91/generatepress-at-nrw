@@ -26,8 +26,8 @@ function product_form(): bool|string {
         );
     }
 
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
-    $universities = get_all(UNIVERSITY_TABLE, 'name');
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, order_by: 'name');
+    $universities = get_all(UNIVERSITY_TABLE, order_by: 'name');
 
     ob_start();
     ?>

@@ -27,7 +27,7 @@ function disability_category_form(): bool|string {
             $category_id
         );
     } else {
-        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
+        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, order_by: 'altText');
     }
 
 ob_start();

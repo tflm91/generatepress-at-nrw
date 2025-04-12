@@ -9,9 +9,9 @@ function product_category_form(): bool|string {
     $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $is_editing = ($category_id > 0);
 
-    $disabilities = get_all(DISABILITY_TABLE, 'name');
-    $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, 'name');
-    $products = get_all(PRODUCT_TABLE, 'name');
+    $disabilities = get_all(DISABILITY_TABLE, order_by: 'name');
+    $limitations = get_all(FUNCTIONAL_LIMITATION_TABLE, order_by: 'name');
+    $products = get_all(PRODUCT_TABLE, order_by: 'name');
 
     if ($is_editing) {
         $current_category = get_by_id(PRODUCT_CATEGORY_TABLE, $category_id);
@@ -54,7 +54,7 @@ function product_category_form(): bool|string {
             'altText'
         );
     } else {
-        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, 'altText');
+        $unselected_links = get_all(ADDITIONAL_LINK_TABLE, order_by: 'altText');
     }
 
     ob_start();

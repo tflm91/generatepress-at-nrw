@@ -18,8 +18,8 @@ function university_form(): bool|string {
         );
     }
 
-    $general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', true, 'name');
-    $non_general_products = get_by_condition(PRODUCT_TABLE, 'availableGeneral', false, 'name');
+    $general_products = get_all(PRODUCT_TABLE, ['availableGeneral' => true], order_by: 'name');
+    $non_general_products = get_all(PRODUCT_TABLE, ['availableGeneral' => false], order_by: 'name');
     ob_start();
     ?>
     <form method="post">

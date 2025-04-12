@@ -16,7 +16,7 @@ function list_editable_items(
     $delete_button_class,
     $item_plural
 ): string {
-    $items = get_all($table_name, $order_by);
+    $items = get_all($table_name, order_by: $order_by);
     $output = '';
 
     if (!empty($items)) {

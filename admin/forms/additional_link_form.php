@@ -25,8 +25,8 @@ function additional_link_form(): bool|string {
         );
     }
 
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
-    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, 'name');
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, order_by: 'name');
+    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, order_by: 'name');
 
     ob_start();
     ?>

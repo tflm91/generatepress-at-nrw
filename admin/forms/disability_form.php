@@ -18,8 +18,8 @@ function disability_form(): bool|string {
         );
     }
 
-    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, 'name');
-    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, 'name');
+    $disability_categories = get_all(DISABILITY_CATEGORY_TABLE, order_by: 'name');
+    $product_categories = get_all(PRODUCT_CATEGORY_TABLE, order_by: 'name');
 
     ob_start();
     ?>

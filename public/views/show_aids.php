@@ -42,7 +42,7 @@ function show_detailed_product_information($product_id): string {
 
 /* list all categories of assistive technologies delt with in the database */
 function list_categories(): string {
-    $rows = get_all(PRODUCT_CATEGORY_TABLE, 'name');
+    $rows = get_all(PRODUCT_CATEGORY_TABLE, order_by: 'name');
     $output = "<div>\n";
     if ($rows) {
         foreach ($rows as $row) {
@@ -66,8 +66,7 @@ function display_product_category_information($row): string {
         PRODUCT_TABLE,
         'productId',
         $row->id,
-        'hidden',
-        0
+        ['hidden' => 0]
     )) {
         $category = new ProductCategory(
             $row->id ?? 0,

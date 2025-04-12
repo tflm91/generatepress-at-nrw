@@ -13,14 +13,26 @@ function query_database($query, $params = [], $single_result = false) {
 }
 
 /* retrieve all entries of a table */
-function get_all($table, $order_by = null) {
+function get_all($table, $conditions = [], $order_by = null) {
+    $where_clauses = [];
+    $params = [];
+
+    foreach ($conditions as $column => $value) {
+        $where_clauses[] = "$column = %s";
+        $params[] = $value;
+    }
+
     $query = "SELECT * FROM $table";
+
+    if (!empty($where_clauses)) {
+        $query .= ' WHERE ' . implode(' AND ', $where_clauses);
+    }
 
     if ($order_by) {
         $query .= " ORDER BY $order_by";
     }
 
-    return query_database($query);
+    return query_database($query, $params);
 }
 
 /* retrieve single entry by ID */
@@ -45,23 +57,30 @@ function get_connected(
     $target_table,
     $connection_column,
     $search_id,
-    $condition_column = null,
-    $condition_value = null,
+    $conditions = [],
     $order_by = null
 ) {
+    $where_clauses = [];
+    $params = [$search_id];
+
+    foreach ($conditions as $column => $value) {
+        $where_clauses[] = "$column = %s";
+        $params[] = $value;
+    }
+
     $query = "SELECT {$target_table}.* FROM {$target_table}"
               . " JOIN {$connection_table} ON {$target_table}.id = {$connection_table}.{$connection_column}"
               . " WHERE {$connection_table}.{$search_column} = %d";
 
-    if ($condition_column) {
-        $query .= " AND {$condition_column} = {$condition_value}";
+    if (!empty($where_clauses)) {
+        $query .= ' AND ' . implode(' AND ', $where_clauses);
     }
 
     if ($order_by) {
         $query .= " ORDER BY {$order_by}";
     }
 
-    return query_database($query, [$search_id]);
+    return query_database($query, $params);
 }
 
 /* retrieve all IDs of an m:n-connection */
@@ -71,14 +90,6 @@ function get_connected_ids($connection_table, $search_column, $connection_column
     return array_map(fn($item) => $item->{$connection_column}, $results);
 }
 
-/* retrieve all entries which satisfy a specified condition*/
-function get_by_condition($table, $column, $value, $order_by = null) {
-    $query = "SELECT * FROM $table WHERE $column = %s";
-    if ($order_by) {
-        $query .= " ORDER BY $order_by";
-    }
-    return query_database($query, [$value]);
-}
 
 /* check if a category has objects */
 function category_has_objects($table, $category_id): bool {
@@ -94,18 +105,25 @@ function category_has_objects($table, $category_id): bool {
     $target_table,
     $connection_column,
     $search_id,
-    $condition_column = null,
-    $condition_value = null
+    $conditions = [],
 ): bool {
+        $where_clauses = [];
+        $params = [$search_id];
+
+        foreach ($conditions as $column => $value) {
+            $where_clauses[] = "$column = %s";
+            $params[] = $value;
+        }
+
         $query = "SELECT COUNT(*) AS count FROM {$connection_table}"
             . " JOIN {$target_table} ON {$connection_table}.{$connection_column} = {$target_table}.id"
             . " WHERE {$connection_table}.{$search_column} = %d";
 
-        if ($condition_column) {
-            $query .= " AND {$condition_column} = {$condition_value}";
+        if (!empty($where_clauses)) {
+            $query .= ' AND ' . implode(' AND ', $where_clauses);
         }
 
-        $result =  query_database($query, [$search_id], true);
+        $result =  query_database($query, $params, true);
         return $result->count > 0;
 }
 
