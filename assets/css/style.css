@@ -1,6 +1,12 @@
+/* the font of the header navigation items */
 .main-navigation .main-nav ul li a {
     font-size: 16px;
     font-weight: 650;
+}
+
+/* general focus indicator */
+*:focus {
+    border: 2px solid black;
 }
 
 /* the dialogue window for the deletion of items */
