@@ -21,7 +21,7 @@ function show_university_details_page($university_id): string {
     if ($row) {
         $university = construct_university_from_row($row);
         $output .= $university->display_information();
-        $output .= "<h3>Verfügbare Hifsmittel</h3>\n";
+        $output .= "<h3>Verfügbare Hilfsmittel</h3>\n";
         $output .= $university->list_special_aids();
         $output .= list_general_aids();
     } else {
