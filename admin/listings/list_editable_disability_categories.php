@@ -23,19 +23,21 @@ function disability_category_modal(): void {
     ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            let dialogue = document.getElementById("delete-dialogue");
+            let modalContent = document.getElementById('modal-content');
+
             document.querySelectorAll(".delete-disability-category").forEach(button => {
                 button.addEventListener("click", function (event) {
                     event.preventDefault();
                     let categoryId = this.getAttribute("data-id");
+                    lastFocusedElement = this;
 
                     fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=check_disability_category&category_id=' + categoryId)
                         .then(response => response.json())
                         .then(data => {
-                            let dialogue = document.getElementById("delete-dialogue");
-                            let modalContent = document.getElementById('modal-content');
-
                             if (data.hasEntries) {
-                                modalContent.innerHTML = '<span class="close" onclick="closeDialogue()">&times;</span> ' +
+                                modalContent.innerHTML = '<span class="close" onclick="closeDialogue()" aria-label="Modal schließen">&times;</span> ' +
+                                    '<h2 id="modal-heading">Behinderungskategorie kann nicht gelöscht werden</h2>' +
                                     "<p>Diese Kategorie enthält noch folgende Beeinträchtigungsformen und kann daher nicht gelöscht werden. </p><ul>" +
                                     data.entries.map(entry => "<li>" + entry.name + "</li>").join("") +
                                     "</ul><p>Bitte lösche erst diese Beeinträchtigungsformen, bevor du die Kategorie löschst</p>" +
@@ -44,6 +46,7 @@ function disability_category_modal(): void {
                                 generateDisabilityCategoryModal(modalContent, categoryId);
                             }
                             dialogue.style.display = "block";
+                            trapFocus(dialogue);
                         })
                 });
             });

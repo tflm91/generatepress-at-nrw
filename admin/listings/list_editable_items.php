@@ -37,7 +37,7 @@ function list_editable_items(
 
         $output .= '</table>';
 
-        $output .= '<div id="delete-dialogue" style="display: none">' .
+        $output .= '<div id="delete-dialogue" role="dialog" aria-modal="true" aria-labelledby="modal-heading" style="display: none">' .
             '<div class="modal-content" id="modal-content"></div>' .
             '</div>';
     } else {
