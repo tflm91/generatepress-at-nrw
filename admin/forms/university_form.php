@@ -33,7 +33,7 @@ function university_form(): bool|string {
 
         <?php text_input(
                 'university_division',
-            'Arbeitsbereich der Ansprechperson',
+            'Arbeitsbereich für behinderte Studierende',
             500,
             true,
              $is_editing ? esc_attr($current_university->division) : ''
@@ -41,12 +41,13 @@ function university_form(): bool|string {
 
         <?php text_input(
                 'university_contact_name',
-            'Name der Ansprechperson',
+            'Name der Ansprechperson (veraltet)',
             100,
             true,
             $is_editing ? esc_attr($current_university->contactName) : ''
         ); ?>
 
+        <p>Telefonnummer der Beratungsperson (veraltet): </p>
         <?php phone_input(
                 'university_phone_number',
              $is_editing ? esc_html($current_university->phoneNumber) : '',
@@ -55,6 +56,7 @@ function university_form(): bool|string {
             $is_editing ? esc_html($current_university->phoneAlt) : ''
         ); ?>
 
+        <p>E-Mailadresse der Beratungsperson (veraltet):</p>
         <?php mail_input(
                 'university_email',
             true,
