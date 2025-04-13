@@ -31,7 +31,7 @@ function delete_link_script(): void {
 
     generate_modal_content_script(
             'generateLinkModal',
-        'diesen Link',
+        'den Link',
         'deleteLink'
     );
 

@@ -26,7 +26,7 @@ function delete_consultant_script(): void {
 
     generate_modal_content_script(
         'generateConsultantModal',
-        'diese Beratungsperson',
+        'die Beratungsperson',
         'deleteConsultant'
     );
 

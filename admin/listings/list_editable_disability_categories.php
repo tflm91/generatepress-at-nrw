@@ -30,6 +30,7 @@ function disability_category_modal(): void {
                 button.addEventListener("click", function (event) {
                     event.preventDefault();
                     let categoryId = this.getAttribute("data-id");
+                    let categoryName = this.getAttribute("data-name");
                     lastFocusedElement = this;
 
                     fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=check_disability_category&category_id=' + categoryId)
@@ -38,12 +39,12 @@ function disability_category_modal(): void {
                             if (data.hasEntries) {
                                 modalContent.innerHTML = '<span class="close" onclick="closeDialogue()" aria-label="Modal schließen">&times;</span> ' +
                                     '<h2 id="modal-heading">Behinderungskategorie kann nicht gelöscht werden</h2>' +
-                                    "<p>Diese Kategorie enthält noch folgende Beeinträchtigungsformen und kann daher nicht gelöscht werden. </p><ul>" +
+                                    '<p>Die Behinderungskategorie "' + categoryName +'" enthält noch folgende Beeinträchtigungsformen und kann daher nicht gelöscht werden. </p><ul>' +
                                     data.entries.map(entry => "<li>" + entry.name + "</li>").join("") +
                                     "</ul><p>Bitte lösche erst diese Beeinträchtigungsformen, bevor du die Kategorie löschst</p>" +
                                     "<button onClick='closeDialogue()'>Schließen</button>";
                             } else {
-                                generateDisabilityCategoryModal(modalContent, categoryId);
+                                generateDisabilityCategoryModal(modalContent, categoryId, categoryName);
                             }
                             dialogue.style.display = "block";
                             trapFocus(dialogue);

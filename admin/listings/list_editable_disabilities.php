@@ -26,7 +26,7 @@ function delete_disability_script(): void {
 
     generate_modal_content_script(
         'generateDisabilityModal',
-        'diese Beeinträchtigungsform',
+        'die Beeinträchtigungsform',
         'deleteDisability'
     );
 

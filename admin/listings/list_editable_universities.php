@@ -26,7 +26,7 @@ function delete_university_script(): void {
 
     generate_modal_content_script(
             'generateUniversityModal',
-        'diese Hochschule',
+        'die Hochschule',
         'deleteUniversity'
     );
 

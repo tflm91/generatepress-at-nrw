@@ -30,7 +30,7 @@ function list_editable_items(
             $output .= '<a href="' . esc_url(site_url('/' . $edit_page . '?id=' . $item->id)) . '">';
             $output .= '<button>Bearbeiten</button>';
             $output .= '</a>';
-            $output .= '<button class="' . $delete_button_class . '" data-id="' . esc_attr($item->id) . '">Löschen</button>';
+            $output .= '<button class="' . $delete_button_class . '" data-id="' . esc_attr($item->id) . '" data-name="' . esc_html($display_item_callback($item)) . '">Löschen</button>';
             $output .= '</td>';
             $output .= '</tr>';
         }

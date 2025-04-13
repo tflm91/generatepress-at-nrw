@@ -26,7 +26,7 @@ function delete_product_script(): void {
 
     generate_modal_content_script(
             'generateProductModal',
-        'dieses Produkt',
+        'das Produkt',
         'deleteProduct'
     );
 

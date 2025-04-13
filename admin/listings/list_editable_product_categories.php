@@ -26,7 +26,7 @@ function delete_product_category_script(): void {
 
     generate_modal_content_script(
             'generateProductCategoryModal',
-        'diese assistive Technologie',
+        'die assistive Technologie',
         'deleteProductCategory',
     );
 

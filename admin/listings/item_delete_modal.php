@@ -26,10 +26,10 @@ function generate_modal_content_script($modal_content_function_name, $item_with_
     $item_without_article = implode(' ', $subWords);
     ?>
     <script>
-        function <?php echo $modal_content_function_name ?>(modalContent, itemId) {
+        function <?php echo $modal_content_function_name ?>(modalContent, itemId, itemName) {
             modalContent.innerHTML = "<span class='close' onclick='closeDialogue()' aria-label='Modal schließen'>&times;</span>" +
                 "<h2 id='modal-heading'><?php echo $item_without_article; ?> löschen?</h2>" +
-                "<p>Bist du sicher, dass du <?php echo $item_with_article ?> löschen möchtest?</p>" +
+                "<p>Bist du sicher, dass du <?php echo $item_with_article ?> &quot;" + itemName + "&quot; löschen möchtest?</p>" +
                 "<button onclick='<?php echo $delete_function_name ?>(" + itemId + ")'>Ja</button> " +
                 "<button onclick='closeDialogue()'>Abbrechen</button>";
         }
@@ -48,9 +48,10 @@ function delete_empty_item_script($delete_button_class, $modal_content_function_
                 button.addEventListener("click" , function (event) {
                     event.preventDefault();
                     let itemId = this.getAttribute("data-id");
+                    let itemName = this.getAttribute("data-name");
                     lastFocusedElement = this;
 
-                    <?php echo $modal_content_function_name ?>(modalContent, itemId);
+                    <?php echo $modal_content_function_name ?>(modalContent, itemId, itemName);
                     dialogue.style.display = "block";
                     trapFocus(dialogue);
                 });
