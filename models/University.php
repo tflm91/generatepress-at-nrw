@@ -7,7 +7,7 @@ require_once get_stylesheet_directory() . '/core/constants.php';
 class University {
     public int $id;
     public string $name;
-    public string $divsion;
+    public string $division;
     public string $contact_name;
     public string $phone_number;
     public string $phone_alt;
@@ -30,7 +30,7 @@ class University {
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->divsion = $division;
+        $this->division = $division;
         $this->contact_name = $contact_name;
         $this->phone_number = $phone_number;
         $this->phone_alt = $phone_alt;
@@ -66,7 +66,7 @@ class University {
     public function display_information(): string {
         $output = "<h2>" . esc_html($this->name) . "</h2>\n";
         $output .= "<h3>Kontaktinformationen zur Beratungsstelle für behinderte Studierende </h3>\n";
-        $output .= '<p><b>Arbeitsbereich: </b>' . esc_html($this->divsion) . '</p>';
+        $output .= '<p><b>Arbeitsbereich: </b>' . esc_html($this->division) . '</p>';
         $output .= '<p><b>Name der Ansprechperson: </b>' . esc_html($this->contact_name) . '</p>';
 
         if ($this->phone_number != '') {
