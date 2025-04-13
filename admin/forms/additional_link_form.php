@@ -43,7 +43,7 @@ function additional_link_form(): bool|string {
         <?php checkbox_input(
                 'comprehensive_link',
             $is_editing ? $current_link->comprehensive : false,
-            'Dies ist ein übergreifender Link. '
+            'Allgemeiner Link zur zentralen Anzeige auf der Website'
         );?>
 
         <fieldset>
