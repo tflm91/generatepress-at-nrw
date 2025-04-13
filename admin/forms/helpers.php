@@ -102,7 +102,7 @@ function phone_input($number_field_name, $old_phone_number, $required, $alt_fiel
                                                            pattern="\+{1-9}{0-9}+" maxlength="20"
                                                            value="<?php echo $old_phone_number; ?>"
                                                            <?php if($required): ?> required <?php endif; ?>"></label><br><br>
-    <label>Alternativtext (max. 20 Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="20" value="<?php echo $old_alt; ?>"></label><br><br>
+    <label>Angezeigter Text (max. 20 Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="20" value="<?php echo $old_alt; ?>"></label><br><br>
     <?php
 }
 
