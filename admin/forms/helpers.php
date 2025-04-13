@@ -10,7 +10,7 @@ function link_input(
 ): void {
     ?>
     <label>URL: <input type="url" maxlength="2048" name="<?php echo $url_field_name; ?>" value="<?php echo $old_url; ?>" <?php if ($required): ?> required <?php endif; ?></label><br><br>
-    <label>Alternativtext (max. <?php echo $alt_maxlength; ?> Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="<?php echo $alt_maxlength ?>" value="<?php echo $old_alt; ?>" <?php if ($required): ?> required <?php endif; ?>></label><br><br>
+    <label>Alternativtext für den Link (max. <?php echo $alt_maxlength; ?> Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="<?php echo $alt_maxlength ?>" value="<?php echo $old_alt; ?>" <?php if ($required): ?> required <?php endif; ?>></label><br><br>
     <?php
 }
 
