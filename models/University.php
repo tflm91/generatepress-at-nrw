@@ -53,8 +53,8 @@ class University {
     }
 
     public function list_special_aids(): string {
-        $before_html = "<h4>Spezielle Produkte der Hochschule</h4>\n";
-        $error = "Diese Hochschule bietet keine eigenen Produkte an. Es können dort nur allgemein verfügbare Produkte genutzt werden ";
+        $before_html = "<h4>Spezielle assistive Technologien der Hochschule</h4>\n";
+        $error = "Diese Hochschule bietet keine Informationen über eigene assistive Technologien an. Es können dort nur allgemein verfügbare assistive Technologien genutzt werden. ";
         return generate_item_list(
             $this->get_aids(),
             "assistive-technologien",

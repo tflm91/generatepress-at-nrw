@@ -21,7 +21,7 @@ function show_university_details_page($university_id): string {
     if ($row) {
         $university = construct_university_from_row($row);
         $output .= $university->display_information();
-        $output .= "<h3>Verfügbare Hilfsmittel</h3>\n";
+        $output .= "<h3>Verfügbare assistive Technologien</h3>\n";
         $output .= $university->list_special_aids();
         $output .= list_general_aids();
     } else {
@@ -50,7 +50,7 @@ function construct_university_from_row($row): University {
 
 /* lists all generally available aids*/
 function list_general_aids(): string {
-    $before_html =  '<h4>Allgemein verfügbare Produkte</h4>';
+    $before_html =  '<h4>Allgemein verfügbare assistive Technologien</h4>';
     return generate_item_list(
         get_all(PRODUCT_TABLE, ['availableGeneral' => true, 'hidden' => false], order_by: 'name'),
         "assistive-technologien",
