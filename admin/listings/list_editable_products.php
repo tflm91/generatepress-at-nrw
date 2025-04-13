@@ -1,6 +1,5 @@
 <?php
 
-require_once get_stylesheet_directory() . '/core/database.php';
 require_once get_stylesheet_directory() . '/core/constants.php';
 require_once get_stylesheet_directory() . '/admin/listings/list_editable_items.php';
 require_once get_stylesheet_directory() . '/admin/listings/item_delete_modal.php';
