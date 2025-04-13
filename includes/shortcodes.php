@@ -12,6 +12,7 @@ require_once get_stylesheet_directory() . '/admin/forms/product_category_form.ph
 require_once get_stylesheet_directory() . '/admin/forms/product_form.php';
 require_once get_stylesheet_directory() . '/admin/forms/university_form.php';
 require_once get_stylesheet_directory() . '/admin/forms/additional_link_form.php';
+require_once get_stylesheet_directory() . '/admin/forms/consultant_form.php';
 
 /* listings */
 require_once get_stylesheet_directory() . '/admin/listings/list_editable_disability_categories.php';
@@ -21,6 +22,7 @@ require_once get_stylesheet_directory() . '/admin/listings/list_editable_product
 require_once get_stylesheet_directory() . '/admin/listings/list_editable_products.php';
 require_once get_stylesheet_directory() . '/admin/listings/list_editable_universities.php';
 require_once get_stylesheet_directory() . '/admin/listings/list_editable_links.php';
+require_once get_stylesheet_directory() . '/admin/listings/list_editable_consultants.php';
 
 /* components */
 require_once get_stylesheet_directory() . '/public/components/list_comprehensive_links.php';

@@ -2,7 +2,7 @@
 
 require_once get_stylesheet_directory() . '/core/constants.php';
 
-function sanitize_phone_number($phone): array|string|null {
+function sanitize_university_phone_number($phone): array|string|null {
     $phone = preg_replace('/[^0-9+]/', '', $phone);
 
     if (!filter_var($phone, FILTER_SANITIZE_NUMBER_INT)) {
@@ -19,7 +19,7 @@ function save_university(): void {
         $contact_name = sanitize_text_field($_POST['university_contact_name']);
 
         $phone_number = htmlspecialchars(
-            sanitize_phone_number($_POST['university_phone_number']),
+            sanitize_university_phone_number($_POST['university_phone_number']),
             ENT_QUOTES,
             'UTF-8'
         );
