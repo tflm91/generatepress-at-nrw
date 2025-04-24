@@ -76,7 +76,7 @@ function university_form(): bool|string {
         <?php textarea_input(
                 'university_workspaces',
             'Arbeitsplätze',
-            500,
+            1000,
             TEXTAREA_ROW_COUNT,
             false,
             $is_editing ? esc_attr($current_university->workspaces) : ''

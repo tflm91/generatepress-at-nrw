@@ -44,7 +44,7 @@ ob_start();
     <?php textarea_input(
             'category_description',
         'Beschreibung',
-        1000,
+        1500,
         TEXTAREA_ROW_COUNT,
         true,
         $is_editing ? esc_attr($current_category->description) : ''
