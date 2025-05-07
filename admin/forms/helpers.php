@@ -95,14 +95,38 @@ function select_input($field_name_and_id, $label, $required, $display_attribute,
     <?php
 }
 
-function phone_input($number_field_name, $old_phone_number, $required, $alt_field_name, $old_alt): void {
+function phone_input($number_field_name_and_id, $old_phone_number, $required, $alt_field_name_and_id, $old_alt): void {
     ?>
     <b>Telefonnummer: </b><br>
-    <label>Telefonnummer im internationalen Format: <input type="tel" name="<?php echo $number_field_name; ?>"
-                                                           pattern="\+{1-9}{0-9}+" maxlength="20"
-                                                           value="<?php echo $old_phone_number; ?>"
-                                                           <?php if($required): ?> required <?php endif; ?>"></label><br><br>
-    <label>Angezeigter Text (max. 20 Zeichen): <input type="text" name="<?php echo $alt_field_name; ?>" maxlength="20" value="<?php echo $old_alt; ?>"></label><br><br>
+    <label for="<?php echo $number_field_name_and_id; ?>" class="phone-input-label">
+        Telefonnummer im internationalen Format
+        <span aria-describedby="<?php echo $number_field_name_and_id . '-help'?>">(z. B. +4915123456789)</span>
+    </label>
+    <input
+            type="tel"
+            id="<?php echo $number_field_name_and_id; ?>"
+            name="<?php echo $number_field_name_and_id; ?>"
+            autocomplete="off"
+            aria-describedby="<?php echo $number_field_name_and_id . '-help'?>"
+            pattern="^\+[\d]{7,15}$"
+            value="<?php echo $old_phone_number; ?>"
+            <?php if($required): ?> required <?php endif; ?>
+    >
+    <small id="<?php echo $number_field_name_and_id . '-help'; ?>">Bitte gib die Telefonnummer mit führendem "+" und Ländervorwahl ein. </small>
+
+    <label for="<?php echo $alt_field_name_and_id; ?>" class="phone-input-label">
+        Link-Text (was die Besucher sehen sollen) (max. 25 Zeichen)
+    </label>
+    <input
+            type="text"
+            id="<?php echo $alt_field_name_and_id; ?>"
+            name="<?php echo $alt_field_name_and_id; ?>"
+            autocomplete="off"
+            <?php if ($required): ?> required <?php endif; ?>
+            aria-describedby="<?php echo $alt_field_name_and_id . '-help' ?>"
+            maxlength="25"
+    >
+    <small id="<?php echo $alt_field_name_and_id . '-help'; ?>">Dieser Text wird im Link angezeigt (z. B. "(01512) 345 67-89"). </small>
     <?php
 }
 

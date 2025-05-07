@@ -49,3 +49,8 @@
 td button {
     margin: 5px;
 }
+
+.phone-input-label {
+    display: block;
+    margin-top: 1em;
+}
