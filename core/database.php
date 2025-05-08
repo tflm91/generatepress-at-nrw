@@ -42,8 +42,8 @@ function get_by_id($table, $id) {
 }
 
 /* retrieve all entries of a specified category */
-function get_by_category($table, $category_id, $order_by = null) {
-    $query = "SELECT * FROM $table WHERE categoryId = %d";
+function get_by_category($table, $category_column, $category_id, $order_by = null) {
+    $query = "SELECT * FROM $table WHERE {$category_column} = %d";
     if ($order_by) {
         $query .= " ORDER BY $order_by";
     }

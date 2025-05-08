@@ -38,7 +38,7 @@ class DisabilityCategory {
     }
 
     function list_disabilities(): string {
-        $disabilities = get_by_category(DISABILITY_TABLE, $this->id, 'name');
+        $disabilities = get_by_category(DISABILITY_TABLE, 'categoryId' , $this->id, 'name');
         return generate_item_list(
             $disabilities,
             "beeintraechtigungsformen",

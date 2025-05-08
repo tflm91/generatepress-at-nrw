@@ -21,7 +21,11 @@ class Consultant {
         $this->email = $email;
     }
 
-    public function display(): void {
+    public static function create_from_row($row): Consultant {
+        return new Consultant($row->id, $row->name, $row->phoneNumber, $row->phoneAlt, $row->email);
+    }
+
+    public function display(): string {
         $output = '<h4>' . esc_html($this->name) . '</h4>';
 
         if ($this->phone_number != '') {
@@ -35,5 +39,7 @@ class Consultant {
         } else {
             $output .= '<p><b>E-Mail: </b>nicht vorhanden</p>';
         }
+
+        return $output;
     }
 }
