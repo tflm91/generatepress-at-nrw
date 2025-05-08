@@ -66,7 +66,7 @@ function sorted_checkbox_list($field_name, $selected_label, $selected_items, $un
 
 function text_input($field_name_and_id, $label, $maxlength, $required, $old_value): void {
     ?>
-    <label for="<?php echo $field_name_and_id; ?>"><?php echo $label; ?> (max. <?php echo $maxlength; ?> Zeichen)</label>
+    <label for="<?php echo $field_name_and_id; ?>"><?php echo $label; ?> (max. <?php echo $maxlength; ?> Zeichen): </label>
     <input type="text" id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" maxlength="<?php echo $maxlength; ?>" <?php if($required): ?> required <?php endif; ?>
            value="<?php echo $old_value; ?>"><br><br>
 
@@ -124,15 +124,17 @@ function phone_input($number_field_name_and_id, $old_phone_number, $required, $a
             autocomplete="off"
             <?php if ($required): ?> required <?php endif; ?>
             aria-describedby="<?php echo $alt_field_name_and_id . '-help' ?>"
+            value="<?php echo $old_alt ?>"
             maxlength="25"
     >
     <small id="<?php echo $alt_field_name_and_id . '-help'; ?>">Dieser Text wird im Link angezeigt (z. B. "(01512) 345 67-89"). </small>
+    <br><br>
     <?php
 }
 
 function mail_input($field_name_and_id, $required, $old_email): void {
     ?>
-    <label for="<?php echo $field_name_and_id; ?>">E-Mail-Adresse</label>
+    <label for="<?php echo $field_name_and_id; ?>">E-Mail-Adresse: </label>
     <input type="email" id="<?php echo $field_name_and_id; ?>" name="<?php echo $field_name_and_id; ?>" <?php if($required): ?> required <?php endif; ?> maxlength="255"
            value="<?php echo $old_email;?>"><br><br>
     <?php

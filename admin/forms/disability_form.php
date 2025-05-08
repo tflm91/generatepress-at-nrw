@@ -34,7 +34,7 @@ function disability_form(): bool|string {
 
         <?php select_input(
                 'disability_category',
-            'Behinderungskategorie',
+            'Behinderungskategorie: ',
             true,
             'name',
             $disability_categories,

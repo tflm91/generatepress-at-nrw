@@ -27,7 +27,7 @@ function consultant_form(): bool|string {
 
     <?php select_input(
         'consultant_university',
-        'Hochschule',
+        'Hochschule: ',
         true,
         'name',
         $universities,
