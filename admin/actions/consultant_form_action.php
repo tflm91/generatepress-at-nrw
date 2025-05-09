@@ -45,7 +45,7 @@ function save_consultant(): void {
             ]);
         }
 
-        wp_redirect(site_url('/beratungspersonen-editieren'));
+        wp_redirect(site_url('/beratungskontakte-editieren'));
         exit;
     }
 }

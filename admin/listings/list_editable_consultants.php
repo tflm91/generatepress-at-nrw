@@ -8,11 +8,11 @@ function list_editable_consultants(): string {
     return list_editable_items(
         CONSULTANT_TABLE,
         'name',
-        'Beratungsperson',
+        'Beratungskontakt',
         'display_by_name',
-        '/beratungsperson-bearbeiten',
+        '/beratungskontakt-bearbeiten',
         'delete-consultant',
-        'Beratungspersonen'
+        'Beratungskontakte'
     );
 }
 
@@ -26,7 +26,7 @@ function delete_consultant_script(): void {
 
     generate_modal_content_script(
         'generateConsultantModal',
-        'die Beratungsperson',
+        'den Beratungskontakt',
         'deleteConsultant'
     );
 

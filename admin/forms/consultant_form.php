@@ -19,7 +19,7 @@ function consultant_form(): bool|string {
     <form method="post">
     <?php text_input(
         'consultant_name',
-        'Name der Beratungsperson (Vor- und Nachname)',
+        'Name des Beratungskontakts',
         100,
         true,
         $is_editing ?  esc_attr($current_consultant->name) : ''
@@ -58,7 +58,7 @@ function consultant_form(): bool|string {
 
     <?php close_buttons(
         'save_consultant',
-        site_url('/beratungspersonen-editieren')
+        site_url('/beratungskontakte-editieren')
     );?>
     </form>
     <?php
