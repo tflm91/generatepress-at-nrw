@@ -32,6 +32,7 @@ class ProductCategory {
         );
 
         if (!empty($additional_links)) {
+            $output .= '<p>Weiterführende Informationen:</p>';
             $output .= generate_link_list($additional_links);
         }
 
