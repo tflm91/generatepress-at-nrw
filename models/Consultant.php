@@ -6,23 +6,26 @@ class Consultant {
     public string $phone_number;
     public string $phone_alt;
     public string $email;
+    public bool $spamProtection;
 
     public function __construct(
         int $id,
         string $name,
         string $phone_number,
         string $phone_alt,
-        string $email
+        string $email,
+        bool $spamProtection
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->phone_number = $phone_number;
         $this->phone_alt = $phone_alt;
         $this->email = $email;
+        $this->spamProtection = $spamProtection;
     }
 
     public static function create_from_row($row): Consultant {
-        return new Consultant($row->id, $row->name, $row->phoneNumber, $row->phoneAlt, $row->email);
+        return new Consultant($row->id, $row->name, $row->phoneNumber, $row->phoneAlt, $row->email, $row->spamProtection);
     }
 
     public function display(): string {
@@ -35,7 +38,11 @@ class Consultant {
         }
 
         if ($this->email != '') {
-            $output .= '<p><b>E-Mail: </b><a href="' . esc_url('mailto:' . $this->email) . '">' . $this->email . '</a></p>';
+            if ($this->spamProtection) {
+                $output .= '<p><b>E-Mail: </b>' . esc_html($this->email) . '</p>';
+            } else {
+                $output .= '<p><b>E-Mail: </b><a href="' . esc_url('mailto:' . $this->email) . '">' . $this->email . '</a></p>';
+            }
         } else {
             $output .= '<p><b>E-Mail: </b>nicht vorhanden</p>';
         }

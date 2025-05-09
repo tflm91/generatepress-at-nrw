@@ -26,11 +26,12 @@ function save_consultant(): void {
 
         $phone_alt = sanitize_text_field($_POST['consultant_phone_alt']);
         $email = sanitize_email($_POST['consultant_email']);
+        $spam_protection = isset($_POST['consultant_spam_protection']);
 
         if (!empty($_POST['consultant_id'])) {
             $consultant_id = $_POST['consultant_id'];
             $wpdb->update(CONSULTANT_TABLE,
-                ['name' => $name, 'universityId' => $university_id, 'phoneNumber' => $phone_number, 'phoneAlt' => $phone_alt, 'email' => $email],
+                ['name' => $name, 'universityId' => $university_id, 'phoneNumber' => $phone_number, 'phoneAlt' => $phone_alt, 'email' => $email, 'spamProtection' => $spam_protection],
                 ['id' => $consultant_id]
             );
         } else {
@@ -39,7 +40,8 @@ function save_consultant(): void {
                 'universityId' => $university_id,
                 'phoneNumber' => $phone_number,
                 'phoneAlt' => $phone_alt,
-                'email' => $email
+                'email' => $email,
+                'spamProtection' => $spam_protection
             ]);
         }
 

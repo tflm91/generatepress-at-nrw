@@ -48,6 +48,12 @@ function consultant_form(): bool|string {
         $is_editing ? esc_attr($current_consultant->email) : ''
     ); ?>
 
+    <?php checkbox_input(
+            'consultant_spam_protection',
+        $is_editing ? $current_consultant->spamProtection : 1,
+        '<b>Spamschutz aktivieren:</b> Wenn du diese Option aktivierst, wird die E-Mail-Adresse nicht verlinkt. '
+    ); ?>
+
     <?php if ($is_editing) id_field('consultant_id', $consultant_id); ?>
 
     <?php close_buttons(
