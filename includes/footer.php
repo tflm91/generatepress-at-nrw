@@ -21,7 +21,7 @@ function add_footer_info(): void {
     $generate_press = 'Erstellt mit <a href="https://generatepress.com">GeneratePress</a>';
     $imprint = '<a href="https://dobus.zhb.tu-dortmund.de/impressum/">Impressum</a>';
     $privacy = '<a href="datenschutzerklaerung">Datenschutzerklärung</a>';
-    $accessibility = '<a href="erklaerung-zur-barrierefreiheit">Barrierefreiheit</a>';
+    $accessibility = '<a href="barrierefreiheit">Barrierefreiheit</a>';
 
     $credits = $copyright . " &bull; " . $all_rights_reserved . " &bull; "
         . $generate_press . " &bull; " . $imprint . " &bull; " . $privacy . " &bull; "
