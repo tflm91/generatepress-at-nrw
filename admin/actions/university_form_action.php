@@ -2,30 +2,11 @@
 
 require_once get_stylesheet_directory() . '/core/constants.php';
 
-function sanitize_university_phone_number($phone): array|string|null {
-    $phone = preg_replace('/[^0-9+]/', '', $phone);
-
-    if (!filter_var($phone, FILTER_SANITIZE_NUMBER_INT)) {
-        return'';
-    }
-
-    return $phone;
-}
 function save_university(): void {
     if (isset($_POST['save_university'])) {
         global $wpdb;
         $name = sanitize_text_field($_POST['university_name']);
         $division = sanitize_text_field($_POST['university_division']);
-        $contact_name = sanitize_text_field($_POST['university_contact_name']);
-
-        $phone_number = htmlspecialchars(
-            sanitize_university_phone_number($_POST['university_phone_number']),
-            ENT_QUOTES,
-            'UTF-8'
-        );
-
-        $phone_alt = sanitize_text_field($_POST['university_phone_alt']);
-        $email = sanitize_email($_POST['university_email']);
         $contact_url = esc_url_raw($_POST['university_contact_url']);
         $contact_alt = sanitize_text_field($_POST['university_contact_alt']);
         $workspaces = sanitize_textarea_field($_POST['university_workspaces']);
@@ -38,10 +19,6 @@ function save_university(): void {
                 [
                     'name' => $name,
                     'division' => $division,
-                    'contactName' => $contact_name,
-                    'phoneNumber' => $phone_number,
-                    'phoneAlt' => $phone_alt,
-                    'email' => $email,
                     'contactUrl' => $contact_url,
                     'contactAlt' => $contact_alt,
                     'workspaces' => $workspaces
@@ -52,12 +29,8 @@ function save_university(): void {
             $wpdb->delete(AVAILABILITY_TABLE, ['universityId' => $university_id]);
         } else {
             $wpdb->insert(UNIVERSITY_TABLE, [
-                'name'=> $name,
+                'name' => $name,
                 'division' => $division,
-                'contactName' => $contact_name,
-                'phoneNumber' => $phone_number,
-                'phoneAlt' => $phone_alt,
-                'email' => $email,
                 'contactUrl' => $contact_url,
                 'contactAlt' => $contact_alt,
                 'workspaces' => $workspaces
